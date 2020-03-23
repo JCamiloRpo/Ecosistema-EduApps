@@ -26,20 +26,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void BtnCargar(View v){
-        permisos(); //Pedir los permisos de almacenamiento
-        if(client == null){
-            Toast.makeText(getApplicationContext(), "Debe establecer una conexión con el servidor", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if(!client.isConnected()){
-            try {
-                if(!client.Conectar()){
-                    Toast.makeText(getApplicationContext(), "Erroneo de conexión: "+client.getStatus()+"\nVerificar datos en ajustes", Toast.LENGTH_SHORT).show();
+        try {
+            permisos(); //Pedir los permisos de almacenamiento
+            if (client == null) {
+                Toast.makeText(getApplicationContext(), "Debe establecer una conexión con el servidor", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (!client.isConnected()) {
+
+                if (!client.Conectar()) {
+                    Toast.makeText(getApplicationContext(), "Erroneo de conexión: " + client.getStatus() + "\nVerificar datos en ajustes", Toast.LENGTH_SHORT).show();
                     return;
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
             }
+        }
+        catch (IOException e) {
+            Toast.makeText(getApplicationContext(), "Error: "+e.getMessage(), Toast.LENGTH_LONG).show();
+            e.printStackTrace();
         }
         Intent i = new Intent(Intent.ACTION_GET_CONTENT);
         i.setType("*/*");
@@ -48,32 +51,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void BtnDescargar(View v){
-        permisos();
-        if(client == null){
-            Toast.makeText(getApplicationContext(), "Debe establecer una conexión con el servidor", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if(!client.isConnected()){
-            try {
-                if(!client.Conectar()){
-                    Toast.makeText(getApplicationContext(), "Erroneo de conexión: "+client.getStatus()+"\nVerificar datos en ajustes", Toast.LENGTH_SHORT).show();
+        try {
+            String remote = "/Prueba.zip", local = "storage/emulated/0/FTP/Archivos", name = "Prueba" + n + ".zip";
+            permisos();
+            if (client == null) {
+                Toast.makeText(getApplicationContext(), "Debe establecer una conexión con el servidor", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (!client.isConnected()) {
+                if (!client.Conectar()) {
+                    Toast.makeText(getApplicationContext(), "Erroneo de conexión: " + client.getStatus() + "\nVerificar datos en ajustes", Toast.LENGTH_SHORT).show();
                     return;
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
             }
-        }
-        String remote = "/Prueba.zip", local ="storage/emulated/0/FTP/Archivos", name="Prueba"+n+".zip";
-        try {
-            if(client.Descargar(remote,local,name)) {
+            if (client.Descargar(remote, local, name)) {
                 Toast.makeText(getApplicationContext(), "El archivo se descargo exitosamente", Toast.LENGTH_LONG).show();
                 n++;
-            }
-            else
+            } else
                 Toast.makeText(getApplicationContext(), "El archivo no se pudo descargar, verifique la ruta remota y la ruta local", Toast.LENGTH_LONG).show();
             client.Desconectar();
-        } catch (IOException e) {
-            Toast.makeText(getApplicationContext(), "Error:"+e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+        catch (IOException e) {
+            Toast.makeText(getApplicationContext(), "Error: "+e.getMessage(), Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
     }
@@ -86,24 +85,24 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_CANCELED)
-            Toast.makeText(getApplicationContext(), "No se eligió un archivo", Toast.LENGTH_SHORT).show();
-
-        if ((resultCode == RESULT_OK) && (requestCode == 1)) {
-            //Procesar el resultado
-            Uri uri = data.getData(); //obtener el uri content
-            String path = GetPathUtil.getPath(getApplicationContext(), uri);
-            File f = new File(path);
-            try {
-                if(client.Cargar(f))
-                    Toast.makeText(getApplicationContext(), "El archivo se subido exitosamente", Toast.LENGTH_LONG).show();
+        try {
+            if (resultCode == RESULT_CANCELED)
+                Toast.makeText(getApplicationContext(), "No se eligió un archivo", Toast.LENGTH_SHORT).show();
+            if ((resultCode == RESULT_OK) && (requestCode == 1)) {
+                //Procesar el resultado
+                Uri uri = data.getData(); //obtener el uri content
+                String path = GetPathUtil.getPath(getApplicationContext(), uri);
+                File f = new File(path);
+                if (client.Cargar(f))
+                    Toast.makeText(getApplicationContext(), "El archivo se subio exitosamente", Toast.LENGTH_LONG).show();
                 else
                     Toast.makeText(getApplicationContext(), "El archivo no se pudo subir", Toast.LENGTH_LONG).show();
-                client.Desconectar();
-            } catch (IOException e) {
-                Toast.makeText(getApplicationContext(), "Error: "+e.getMessage(), Toast.LENGTH_LONG).show();
-                e.printStackTrace();
             }
+            client.Desconectar();
+        }
+        catch (IOException e) {
+            Toast.makeText(getApplicationContext(), "Error: "+e.getMessage(), Toast.LENGTH_LONG).show();
+            e.printStackTrace();
         }
     }
 

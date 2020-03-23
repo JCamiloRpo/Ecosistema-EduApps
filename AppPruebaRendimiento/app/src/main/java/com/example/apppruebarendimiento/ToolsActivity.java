@@ -21,7 +21,7 @@ public class ToolsActivity extends AppCompatActivity {
     }
 
     private void loadData(){
-        if(MainActivity.client == null)
+        if(MainActivity.client == null) //Si no hay conexion se dejan los campos vacios, si ya hay una se llenan
             return;
         direccionIp = (EditText) findViewById(R.id.edit_ip);
         usuario= (EditText) findViewById(R.id.edit_user);
@@ -32,32 +32,30 @@ public class ToolsActivity extends AppCompatActivity {
     }
 
     public void BtnConectar(View v){
-        direccionIp = (EditText) findViewById(R.id.edit_ip);
-        usuario= (EditText) findViewById(R.id.edit_user);
-        contraseña = (EditText) findViewById(R.id.edit_password);
-        if(direccionIp.getText().toString().isEmpty()) {
-            Toast.makeText(this, "Debe ingresar la Ip del servidor FTP", Toast.LENGTH_LONG).show();
-        }
-        else if(usuario.getText().toString().isEmpty()) {
-            Toast.makeText(this, "Debe ingresar el usuario del servidor FTP", Toast.LENGTH_LONG).show();
-        }
-        else if(contraseña.getText().toString().isEmpty()) {
-            Toast.makeText(this, "Debe ingresar la contraseña del servidor FTP", Toast.LENGTH_LONG).show();
-        }
-        else {
-            MainActivity.client = new ConexionFTP(direccionIp.getText().toString(),usuario.getText().toString(),contraseña.getText().toString());
-            try {
-                if(MainActivity.client.Conectar()){
+        try {
+            direccionIp = (EditText) findViewById(R.id.edit_ip);
+            usuario = (EditText) findViewById(R.id.edit_user);
+            contraseña = (EditText) findViewById(R.id.edit_password);
+            if (direccionIp.getText().toString().isEmpty()) { //Validaciones de nulos
+                Toast.makeText(this, "Debe ingresar la Ip del servidor FTP", Toast.LENGTH_LONG).show();
+            } else if (usuario.getText().toString().isEmpty()) {
+                Toast.makeText(this, "Debe ingresar el usuario del servidor FTP", Toast.LENGTH_LONG).show();
+            } else if (contraseña.getText().toString().isEmpty()) {
+                Toast.makeText(this, "Debe ingresar la contraseña del servidor FTP", Toast.LENGTH_LONG).show();
+            } else {//Se crea la conexion
+                MainActivity.client = new ConexionFTP(direccionIp.getText().toString(), usuario.getText().toString(), contraseña.getText().toString());
+
+                if (MainActivity.client.Conectar()) {
                     Toast.makeText(getApplicationContext(), "Conexión y logIn Exitoso", Toast.LENGTH_SHORT).show();
-                    MainActivity.client.Desconectar();
-                    finish();
-                }
-                else
-                    Toast.makeText(getApplicationContext(), "LogIn Erroneo: "+MainActivity.client.getStatus(), Toast.LENGTH_SHORT).show();
-            } catch (IOException e) {
-                Toast.makeText(getApplicationContext(), "Error: "+e.getMessage(), Toast.LENGTH_LONG).show();
-                e.printStackTrace();
+                    MainActivity.client.Desconectar();//se desconecta
+                    finish(); //Se devuelve a la actividad principal
+                } else
+                    Toast.makeText(getApplicationContext(), "LogIn Erroneo: " + MainActivity.client.getStatus(), Toast.LENGTH_SHORT).show();
             }
+        }
+        catch (IOException e) {
+            Toast.makeText(getApplicationContext(), "Error: "+e.getMessage(), Toast.LENGTH_LONG).show();
+            e.printStackTrace();
         }
     }
 
