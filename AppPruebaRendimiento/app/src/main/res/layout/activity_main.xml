@@ -35,7 +35,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
-        android:background="@drawable/btn_descargar_drawable"
+        android:background="@drawable/btn_style"
         android:onClick="BtnCargar"
         android:text="@string/cargar_archivo"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -55,7 +55,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="400dp"
         android:layout_marginBottom="104dp"
-        android:background="@drawable/btn_cargar_drawable"
+        android:background="@drawable/btn_style"
         android:onClick="BtnDescargar"
         android:text="@string/descargar_archivo"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -77,6 +77,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/tools" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

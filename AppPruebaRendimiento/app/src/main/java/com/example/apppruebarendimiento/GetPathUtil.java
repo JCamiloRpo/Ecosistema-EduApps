@@ -11,7 +11,6 @@ import android.provider.MediaStore;
 
 public class GetPathUtil {
 
-    @org.jetbrains.annotations.Nullable
     public static String getPath(final Context context, final Uri uri) {// DocumentProvider
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             if (DocumentsContract.isDocumentUri(context, uri)) { // ExternalStorageProvider

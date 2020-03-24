@@ -1,6 +1,7 @@
 package com.example.apppruebarendimiento;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.View;
 import android.widget.Toast;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -20,8 +22,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        n=0;
         setContentView(R.layout.activity_main);
+        n=0;
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitNetwork().build());
     }
 
