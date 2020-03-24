@@ -12,6 +12,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+<<<<<<< Updated upstream
+=======
+import java.text.DecimalFormat;
+import java.util.Timer;
+import java.util.TimerTask;
+>>>>>>> Stashed changes
 
 public class ConexionFTP {
     FTPClient Client; // Objecto de la libreria
@@ -63,29 +69,57 @@ public class ConexionFTP {
     }
 
     public boolean Cargar(File file) throws IOException {
+<<<<<<< Updated upstream
+=======
+        DecimalFormat format = new DecimalFormat("#.00");
+>>>>>>> Stashed changes
         Client.setFileType(FTP.BINARY_FILE_TYPE); //Elegir el tipo de archivo a cargar
         Client.enterLocalPassiveMode(); //Entrar en modo pasivo
         InputStream fis = new FileInputStream(file.getAbsolutePath()); //Crear un obtjeto del archivo a subir
         // Guardando el archivo en el servidor
+        long tInicio = System.currentTimeMillis();// Metodo para iniciar el tiempo de ejecucion en milisegundos
         boolean r = Client.storeFile(file.getName(),fis); //Metodo para subir el archivo al servidor
         float length= file.length(); //Obtener el tamaño del archivo a enviar
+<<<<<<< Updated upstream
         length /=(1024*1024); //Convertir en MB
         String[] args = {"Carga.txt","Reporte de cargar","Ancho de banda: ","Tamaño archivo: "+length+" MB","Duracion: "+" s","Velocidad promedio: "+" MB/s"};
+=======
+        double lengthtotal=length /=(1024*1024); //Convertir en MB
+        double velocidad = lengthtotal/segundosTranscurridos; // Hallar velocidad
+        double anchobanda = velocidad*8;// Hallar ancho de banda
+        String[] args = {"Carga.txt","Reporte de cargar de: "+file.getName(),
+                "Ancho de banda: "+format.format(anchobanda)+" Mb/s","Tamaño archivo: "+format.format(length)+" MB",
+                "Duracion: "+format.format(segundosTranscurridos)+" s","Velocidad promedio: "+format.format(velocidad)+" MB/s"};
+>>>>>>> Stashed changes
         Reporte(args);
         return r;
     }
 
     public boolean Descargar(String remote, String local, String name) throws IOException {
+<<<<<<< Updated upstream
+=======
+        DecimalFormat format = new DecimalFormat("#.00");
+>>>>>>> Stashed changes
         File folder = new File(local); //Se recibe el directorio donde se desea almacenar el archivo
         if(!folder.exists()) //Si no existe crea los directorios que necesita
             if(!folder.mkdirs())
                 return false;
         OutputStream out = new FileOutputStream(local+"/"+name); //Crea el archivo que se guardará
+        long tInicio = System.currentTimeMillis(); // Metodo para iniciar el tiempo de ejecucion en milisegundos
         boolean r = Client.retrieveFile(remote,out); // Se guarda el archivo del servidor en el celular
         out.close();
         float length= new File(local+"/"+name).length(); //Obtener el tamaño del archivo que se descargo
+<<<<<<< Updated upstream
         length /=(1024*1024); //Convertir en MB
         String[] args = {"Descarga.txt","Reporte de descarga","Ancho de banda: ","Tamaño archivo: "+length+" MB","Duracion :"+" s" ,"Velocidad promedio: "+" MB/s"};
+=======
+        double lengthtotal= length /=(1024*1024); //Convertir en MB
+        double velocidad = lengthtotal/segundosTranscurridos; //Hallar velocidad
+        double anchobanda = velocidad*8;// Hallar ancho de banda
+        String[] args = {"Descarga.txt","Reporte de descarga de: "+name,
+                "Ancho de banda: "+format.format(anchobanda)+" Mb/s","Tamaño archivo: "+format.format(length)+" MB",
+                "Duracion: "+format.format(segundosTranscurridos)+" s","Velocidad promedio: "+format.format(velocidad)+" MB/s"};
+>>>>>>> Stashed changes
         Reporte(args);
         return r;
     }

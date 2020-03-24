@@ -3,10 +3,10 @@
     package="com.example.apppruebarendimiento"
     android:targetSandboxVersion="2"
     android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionName="3.0" >
 
     <uses-sdk
-        android:minSdkVersion="14"
+        android:minSdkVersion="21"
         android:targetSdkVersion="29" />
 
     <uses-permission android:name="android.permission.INTERNET" />
