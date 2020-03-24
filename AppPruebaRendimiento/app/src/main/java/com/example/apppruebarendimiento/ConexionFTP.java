@@ -1,6 +1,9 @@
 package com.example.apppruebarendimiento;
 
-import org.apache.commons.net.ftp.FTP;
+import android.media.MediaSync;
+import android.net.wifi.p2p.WifiP2pManager;
+
+import  org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 
 import java.io.BufferedWriter;
@@ -12,6 +15,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ConexionFTP {
     FTPClient Client; // Objecto de la libreria
@@ -50,6 +55,7 @@ public class ConexionFTP {
         Pas = pas;
     }
 
+
     public boolean Conectar() throws IOException {
         Client.connect(Ftp); //Metodo para conectar con el servidor
         Client.changeWorkingDirectory("/");
@@ -63,31 +69,46 @@ public class ConexionFTP {
     }
 
     public boolean Cargar(File file) throws IOException {
+
         Client.setFileType(FTP.BINARY_FILE_TYPE); //Elegir el tipo de archivo a cargar
+        long tInicio = System.currentTimeMillis();// Metodo para iniciar el tiempo de ejecucion en milisegundos
         Client.enterLocalPassiveMode(); //Entrar en modo pasivo
         InputStream fis = new FileInputStream(file.getAbsolutePath()); //Crear un obtjeto del archivo a subir
         // Guardando el archivo en el servidor
         boolean r = Client.storeFile(file.getName(),fis); //Metodo para subir el archivo al servidor
+        long tFinal = System.currentTimeMillis(); //Metodo para finalizar el tiempo de ejecucion en milisegundos
+        long tDiferencia = tFinal - tInicio; // Se logra la diferiencia entre long inicio y long final
+        double segundosTranscurridos = tDiferencia/1000.0; // Convertir a segundos
         float length= file.length(); //Obtener el tamaño del archivo a enviar
-        length /=(1024*1024); //Convertir en MB
-        String[] args = {"Carga.txt","Reporte de cargar","Ancho de banda: ","Tamaño archivo: "+length+" MB","Duracion: "+" s","Velocidad promedio: "+" MB/s"};
+        double lengthtotal=length /=(1024*1024); //Convertir en MB
+        double velocidad = lengthtotal/segundosTranscurridos; // Hallar velocidad
+        double anchobanda = velocidad*8;// Hallar ancho de banda
+        String[] args = {"Carga.txt","Reporte de cargar","Ancho de banda: "+anchobanda+"Mb/s","Tamaño archivo: "+length+" MB","Duracion: "+segundosTranscurridos+" s","Velocidad promedio: "+velocidad+" MB/s"};
         Reporte(args);
         return r;
     }
 
     public boolean Descargar(String remote, String local, String name) throws IOException {
+
         File folder = new File(local); //Se recibe el directorio donde se desea almacenar el archivo
         if(!folder.exists()) //Si no existe crea los directorios que necesita
             if(!folder.mkdirs())
                 return false;
+        long tInicio = System.currentTimeMillis(); // Metodo para iniciar el tiempo de ejecucion en milisegundos
         OutputStream out = new FileOutputStream(local+"/"+name); //Crea el archivo que se guardará
         boolean r = Client.retrieveFile(remote,out); // Se guarda el archivo del servidor en el celular
         out.close();
+        long tFinal = System.currentTimeMillis();//Metodo para finalizar el tiempo de ejecucion en milisegundos
+        long tDiferencia = tFinal - tInicio; // Se logra la diferiencia entre long inicio y long final
+        double segundosTranscurridos = tDiferencia/1000.0; // Convertir a segundos
         float length= new File(local+"/"+name).length(); //Obtener el tamaño del archivo que se descargo
-        length /=(1024*1024); //Convertir en MB
-        String[] args = {"Descarga.txt","Reporte de descarga","Ancho de banda: ","Tamaño archivo: "+length+" MB","Duracion :"+" s" ,"Velocidad promedio: "+" MB/s"};
+        double lengthtotal= length /=(1024*1024); //Convertir en MB
+        double velocidad = lengthtotal/segundosTranscurridos; //Hallar velocidad
+        double anchobanda = velocidad*8;// Hallar ancho de banda
+        String[] args = {"Descarga.txt","Reporte de descarga","Ancho de banda: "+anchobanda+"Mbps","Tamaño archivo: "+length+" MB","Duracion :"+segundosTranscurridos+" s" ,"Velocidad promedio: "+velocidad+" MB/s"};
         Reporte(args);
         return r;
+
     }
 
     public void Reporte(String[] args) throws IOException {
@@ -105,6 +126,7 @@ public class ConexionFTP {
             bw.write(args[i]+"\n");
         bw.write("\n");
         bw.close();
+
     }
 
     public String getStatus() throws IOException {
@@ -114,4 +136,6 @@ public class ConexionFTP {
     public boolean isConnected(){
         return Client.isConnected();
     }
+
+
 }
