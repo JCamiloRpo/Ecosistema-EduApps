@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void BtnDescargar(View v){
         try {
-            String remote = "/Prueba.zip", local = "storage/emulated/0/FTP/Archivos", name = "Prueba" + n + ".zip";
+            String remote = "/home/pi/Prueba.zip", local = "storage/emulated/0/FTP/Archivos", name = "Prueba" + n + ".zip";
             permisos();
             if (client == null) {
                 Toast.makeText(getApplicationContext(), "Debe establecer una conexión con el servidor", Toast.LENGTH_SHORT).show();

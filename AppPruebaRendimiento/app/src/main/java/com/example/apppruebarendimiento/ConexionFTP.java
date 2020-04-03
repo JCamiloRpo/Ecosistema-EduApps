@@ -66,6 +66,7 @@ public class ConexionFTP {
     public boolean Cargar(File file) throws IOException {
 
         DecimalFormat format = new DecimalFormat("#.00");
+        Client.changeWorkingDirectory("/home/pi/");
         Client.setFileType(FTP.BINARY_FILE_TYPE); //Elegir el tipo de archivo a cargar
         Client.enterLocalPassiveMode(); //Entrar en modo pasivo
         InputStream fis = new FileInputStream(file.getAbsolutePath()); //Crear un obtjeto del archivo a subir
@@ -76,7 +77,6 @@ public class ConexionFTP {
         long tDiferencia = tFinal - tInicio; // Se logra la diferiencia entre long inicio y long final
         double segundosTranscurridos = tDiferencia/1000.0; // Convertir a segundos
         float length= file.length(); //Obtener el tamaño del archivo a enviar
-        length /=(1024*1024); //Convertir en MB
         double lengthtotal = length /=(1024*1024); //Convertir en MB
         double velocidad = lengthtotal/segundosTranscurridos; // Hallar velocidad
         double anchobanda = velocidad*8;// Hallar ancho de banda
@@ -101,7 +101,6 @@ public class ConexionFTP {
         long tDiferencia = tFinal - tInicio; // Se logra la diferiencia entre long inicio y long final
         double segundosTranscurridos = tDiferencia/1000.0; // Convertir a segundos
         float length= new File(local+"/"+name).length(); //Obtener el tamaño del archivo que se descargo
-        length /=(1024*1024); //Convertir en MB
         double lengthtotal= length /=(1024*1024); //Convertir en MB
         double velocidad = lengthtotal/segundosTranscurridos; //Hallar velocidad
         double anchobanda = velocidad*8;// Hallar ancho de banda
