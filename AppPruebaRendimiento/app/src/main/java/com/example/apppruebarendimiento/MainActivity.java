@@ -1,6 +1,7 @@
 package com.example.apppruebarendimiento;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.View;
 import android.widget.Toast;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -20,8 +22,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        n=0;
         setContentView(R.layout.activity_main);
+        n=0;
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitNetwork().build());
     }
 
@@ -52,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void BtnDescargar(View v){
         try {
-            String remote = "/Prueba.zip", local = "storage/emulated/0/FTP/Archivos", name = "Prueba" + n + ".zip";
+            String remote = "/home/pi/Prueba.zip", local = "storage/emulated/0/FTP/Archivos", name = "Prueba" + n + ".zip";
             permisos();
             if (client == null) {
                 Toast.makeText(getApplicationContext(), "Debe establecer una conexión con el servidor", Toast.LENGTH_SHORT).show();
