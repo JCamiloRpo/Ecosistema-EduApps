@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">EU Estudiante</string>
+    <string name="id_sesion_de_clase">ID sesión de clase</string>
+    <string name="nro_identificacion">Número identificación</string>
+    <string name="iniciar_sesion">Iniciar sesión</string>
+    <string name="descripcion">DESCRIPCIÓN</string>
+    <string name="nro_actividad">NÚMERO\nACTIVIDAD</string>
+    <string name="descargar">Descargar</string>
+    <string name="archivos">ARCHIVOS</string>
+    <string name="descripcionactividad">Descripción de la actividad</string>
+    <string name="descripcionsesion">Descripción de la sesion</string>
+    <string name="nro">#</string>
+    <string name="nro_sesion">NÚMERO\nSESIÓN</string>
+    <string name="actividad">ACTIVIDADES</string>
+    <string name="logo">Logo EduApps</string>
+    <string-array name="tipoident">
+        <item>Tipo de identificación</item>
+        <item>TI</item>
+        <item>CC</item>
+    </string-array>
 </resources>
