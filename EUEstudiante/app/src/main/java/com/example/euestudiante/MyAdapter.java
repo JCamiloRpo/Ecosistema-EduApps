@@ -1,44 +1,50 @@
 package com.example.euestudiante;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
-    private String[] mDataset;
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView textView;
-        public MyViewHolder(TextView v) {
-            super(v);
-            textView = v;
-        }
+    ArrayList<String> listDatos;
+
+    public MyAdapter(ArrayList<String> listDatos) {
+        this.listDatos = listDatos;
     }
 
-    public MyAdapter(String[] myDataset) {
-        mDataset = myDataset;
-    }
-
-    /*Personalizar la viesta de la coleccion*/
+    @NonNull
     @Override
-    public MyAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        TextView v = (TextView) LayoutInflater.from(parent.getContext()).inflate(R.layout.support_simple_spinner_dropdown_item, parent, false);
-        MyViewHolder vh = new MyViewHolder(v);
-        return vh;
+    public MyAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return null;
     }
 
-    /*Remplazar un elemento en la posicion especificada*/
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
-        holder.textView.setText(mDataset[position]);
+    public void onBindViewHolder(@NonNull MyAdapter.MyViewHolder holder, int position) {
+        holder.asignarDatos(listDatos.get(position));
 
     }
 
-    /*Obtener el tamaño de la colección*/
     @Override
     public int getItemCount() {
-        return mDataset.length;
+        return listDatos.size();
+    }
+
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        TextView dato;
+
+        public MyViewHolder(@NonNull View itemView) {
+            super(itemView);
+            dato = (TextView) itemView.findViewById(R.id.recycler_archivos);
+        }
+
+        public void asignarDatos(String datos) {
+            dato.setText(datos);
+        }
     }
 }

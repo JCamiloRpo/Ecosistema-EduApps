@@ -6,7 +6,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 
+import java.util.ArrayList;
+
 public class ArchivoActivity extends AppCompatActivity {
+
+    ArrayList<String> listDatos;
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -16,7 +20,7 @@ public class ArchivoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_archivo);
+        setContentView(R.layout.activity_actividad);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_archivos);
 
         recyclerView.setHasFixedSize(true);
@@ -24,7 +28,12 @@ public class ArchivoActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        mAdapter = new MyAdapter(myDataset);
+        listDatos = new ArrayList<String>();
+        for (int i=0; i<=50; i++){
+            listDatos.add("Dato # " +i+ " ");
+        }
+
+
         recyclerView.setAdapter(mAdapter);
     }
 
