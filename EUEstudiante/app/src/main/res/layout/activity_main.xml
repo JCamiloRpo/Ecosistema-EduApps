@@ -7,69 +7,87 @@
     android:background="#ffffff"
     tools:context=".MainActivity">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/imageView"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginBottom="50dp"
-            android:contentDescription="@string/logo"
-            app:srcCompat="@drawable/logo_eduapps" />
+            android:orientation="vertical" >
 
-        <EditText
-            android:id="@+id/edit_sesion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="50dp"
-            android:layout_marginBottom="5dp"
-            android:autofillHints=""
-            android:ems="10"
-            android:hint="@string/id_sesion_de_clase"
-            android:inputType="textPersonName"
-            tools:targetApi="o" />
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginBottom="50dp"
+                android:contentDescription="@string/logo"
+                app:srcCompat="@drawable/logo_eduapps" />
 
-        <Spinner
-            android:id="@+id/spinner_tipoIdent"
-            android:layout_width="213dp"
-            android:layout_height="42dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:entries="@array/tipoident" />
+            <EditText
+                android:id="@+id/edit_sesion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginBottom="10dp"
+                android:autofillHints=""
+                android:ems="10"
+                android:fontFamily="sans-serif-light"
+                android:hint="@string/id_sesion_de_clase"
+                android:inputType="number"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                tools:targetApi="o"
+                tools:text="Id Sesión de Clase" />
 
-        <EditText
-            android:id="@+id/edit_numIdent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="10dp"
-            android:autofillHints=""
-            android:ems="10"
-            android:hint="@string/nro_identificacion"
-            android:inputType="textPersonName"
-            tools:targetApi="o" />
+            <Spinner
+                android:id="@+id/spinner_tipoIdent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginBottom="10dp"
+                android:background="#ffffff"
+                android:dropDownWidth="match_parent"
+                android:entries="@array/tipoident"
+                android:fontFamily="sans-serif-light"
+                android:spinnerMode="dropdown"
+                android:textAlignment="inherit"
+                android:textSize="18sp" />
 
-        <Button
-            android:id="@+id/btn_sesion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/btn_style"
-            android:onClick="BtnSesion"
-            android:padding="10dp"
-            android:text="@string/iniciar_sesion" />
-    </LinearLayout>
+            <EditText
+                android:id="@+id/edit_numIdent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginBottom="10dp"
+                android:autofillHints=""
+                android:ems="10"
+                android:fontFamily="sans-serif-light"
+                android:hint="@string/nro_identificacion"
+                android:inputType="number"
+                tools:targetApi="o"
+                tools:text="Número de Identificación" />
+
+            <Button
+                android:id="@+id/btn_sesion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:background="@drawable/btn_style"
+                android:fontFamily="sans-serif-light"
+                android:onClick="btnSesion"
+                android:padding="10dp"
+                android:text="@string/iniciar_sesion"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

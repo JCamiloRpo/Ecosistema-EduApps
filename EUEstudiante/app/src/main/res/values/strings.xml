@@ -13,6 +13,12 @@
     <string name="nro_sesion">NÚMERO\nSESIÓN</string>
     <string name="actividad">ACTIVIDADES</string>
     <string name="logo">Logo EduApps</string>
+    <string name="actividades_de_la_sesi_n_de_clase">ACTIVIDADES DE LA SESIÓN DE CLASE</string>
+    <string name="tiempo">Tiempo:</string>
+    <string name="recurso">Recursos:</string>
+    <string name="separador">-</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="consulta">https://192.168.0.101/api/get/</string>
     <string-array name="tipoident">
         <item>Tipo de identificación</item>
         <item>TI</item>
