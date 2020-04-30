@@ -73,7 +73,7 @@ public abstract class ConexionApiRest {
         {
             CertificateFactory cf = CertificateFactory.getInstance("X.509");
 
-            InputStream caInput = new BufferedInputStream(MainActivity.context.getAssets().open("certificado.cer"));
+            InputStream caInput = new BufferedInputStream(MainActivity.context.getAssets().open("server.cer"));
             Certificate ca = cf.generateCertificate(caInput);
             System.out.println("ca=" + ((X509Certificate) ca).getSubjectDN());
 
