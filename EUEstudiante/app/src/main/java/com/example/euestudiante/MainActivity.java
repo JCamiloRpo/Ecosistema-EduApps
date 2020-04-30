@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         //Me conecto con el servidor de base de datos
         String ftps, user, pass;
         try {
-            String[][] data = ConexionApiRest.getData( getString(R.string.consulta)+"Ftps");
+            String[][] data = ConexionApiRest.getData( getString(R.string.consulta)+"FTPS");
             ftps = data[0][1];
             user = data[0][2];
             pass = data[0][3];
