@@ -75,7 +75,8 @@ public abstract class ConexionApiRest {
 
             InputStream caInput = new BufferedInputStream(MainActivity.context.getAssets().open("server.cer"));
             Certificate ca = cf.generateCertificate(caInput);
-            System.out.println("ca=" + ((X509Certificate) ca).getSubjectDN());
+            //System.out.println("ca=" + ((X509Certificate) ca).getSubjectDN());
+            caInput.close();
 
             String keyStoreType = KeyStore.getDefaultType();
             KeyStore keyStore = KeyStore.getInstance(keyStoreType);
@@ -95,7 +96,8 @@ public abstract class ConexionApiRest {
             urlConnection.setHostnameVerifier( new HostnameVerifier() {
                 @Override
                 public boolean verify(String hostname, SSLSession session) {
-                    return true;
+                    HostnameVerifier hv = HttpsURLConnection.getDefaultHostnameVerifier();
+                    return hv.verify("192.168.0.101", session);
                 }
             });
             return urlConnection;
