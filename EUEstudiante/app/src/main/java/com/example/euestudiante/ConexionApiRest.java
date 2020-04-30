@@ -96,8 +96,7 @@ public abstract class ConexionApiRest {
             urlConnection.setHostnameVerifier( new HostnameVerifier() {
                 @Override
                 public boolean verify(String hostname, SSLSession session) {
-                    HostnameVerifier hv = HttpsURLConnection.getDefaultHostnameVerifier();
-                    return hv.verify("192.168.0.101", session);
+                    return true;
                 }
             });
             return urlConnection;
