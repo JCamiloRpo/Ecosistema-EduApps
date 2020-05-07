@@ -9,8 +9,13 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 
-public class GetPathUtil {
+public abstract class GetPathUtil {
 
+    /**
+     * Recuperar todo el path de un archivo
+     * @param context de donde se llama el metodo
+     * @param uri del archivo
+     */
     public static String getPath(final Context context, final Uri uri) {// DocumentProvider
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             if (DocumentsContract.isDocumentUri(context, uri)) { // ExternalStorageProvider

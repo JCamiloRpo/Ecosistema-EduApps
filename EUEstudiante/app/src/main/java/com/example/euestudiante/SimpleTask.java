@@ -24,6 +24,10 @@ public class SimpleTask extends AsyncTask<String[], Float, String> {
         this.isDescarga = isDescarga;
     }
 
+    /**
+     * Lo ejecuta el hilo principal antes de que inicie el hilo hijo
+     * Deshabilita el boton de descarga y muestra la ventana de dialogo
+     */
     @Override
     protected void onPreExecute() {
         try {
@@ -36,6 +40,12 @@ public class SimpleTask extends AsyncTask<String[], Float, String> {
         }
     }
 
+    /**
+     * Lo ejecuta el hilo hijo en segundo plano
+     * Empieza la descargar o carga de los n archivos
+     * @param params
+     * @return
+     */
     @Override
     protected String doInBackground(final String[][] params) {
         String resul="";
@@ -59,6 +69,11 @@ public class SimpleTask extends AsyncTask<String[], Float, String> {
         return resul;
     }
 
+    /**
+     * Lo ejecuta el hilo hijo despues de terminar su codigo
+     * Habilita el boton de descargar y cierra la ventana de dialogo
+     * @param result
+     */
     @Override
     protected void onPostExecute(String result) {
         try {
@@ -67,11 +82,17 @@ public class SimpleTask extends AsyncTask<String[], Float, String> {
             else Toast.makeText(item.getContext(), "Carga exitosa", Toast.LENGTH_SHORT).show();
             dialog.dismiss();
             MainActivity.client.disconnect();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * Si se llega cancelar por alguna razon para el hilo hijo
+     * Habilita el boton de descargar y cierra la ventana de dialogo
+     * @param result
+     */
     @Override
     protected void onCancelled(String result) {
         try {
@@ -86,10 +107,17 @@ public class SimpleTask extends AsyncTask<String[], Float, String> {
 
     }
 
+    /**
+     * Lo ejecuata el hilo hijo por si se quiere mostrar una barra de progreso
+     * @param values
+     */
     @Override
     protected void onProgressUpdate(Float... values) {
     }
 
+    /**
+     * Metodo auxiliar para mostar la ventana de dialogo por si se desea cancelar la descarga
+     */
     private void alert(){
         TextView actividad, id, descripcion;
         Button btnCancelar;
@@ -99,6 +127,7 @@ public class SimpleTask extends AsyncTask<String[], Float, String> {
         AlertDialog.Builder message = new AlertDialog.Builder(item.getContext());
         View ventana = LayoutInflater.from(item.getContext()).inflate(R.layout.dialog_descarga,null);
         message.setView(ventana);
+        message.setCancelable(false);
         dialog = message.create();
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 

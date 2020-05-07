@@ -1,21 +1,22 @@
-package com.example.euestudiante;
+package com.example.euprofesor;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.security.InvalidKeyException;
 import java.security.KeyStore;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
+
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -46,7 +47,9 @@ public class ConexionApiRest {
     public String[][] getData(String table) throws IllegalAccessException, InvalidKeyException, IOException, JSONException {
         String[][] strData;
         int ncolum,nrow;
-        JSONObject json= new JSONObject(downloadData(url+"getData.php?t="+table, "GET"));//Descargo el archivo JSON
+        String responde = downloadData(url+"getData.php?t="+table, "GET");//Descargo el archivo JSON
+        if(responde.contains("Empty Data")) return new String[0][0];
+        JSONObject json= new JSONObject(responde);
         JSONArray tmp = json.getJSONArray("data");
         ncolum = tmp.getJSONObject(0).length()/2;
         nrow = tmp.length();
@@ -73,7 +76,9 @@ public class ConexionApiRest {
     public String[][] getData(String table, String columns) throws IllegalAccessException, InvalidKeyException, IOException, JSONException {
         String[][] strData;
         int ncolum,nrow;
-        JSONObject json= new JSONObject(downloadData(url+"getData.php?t="+table+"&c="+columns,"GET"));//Descargo el archivo JSON
+        String responde = downloadData(url+"getData.php?t="+table, "GET");//Descargo el archivo JSON
+        if(responde.contains("Empty Data")) return new String[0][0];
+        JSONObject json= new JSONObject(responde);
         JSONArray tmp = json.getJSONArray("data");
         ncolum = tmp.getJSONObject(0).length()/2;
         nrow = tmp.length();
@@ -101,7 +106,9 @@ public class ConexionApiRest {
     public String[][] getData(String table, String columns, String where) throws IllegalAccessException, InvalidKeyException, IOException, JSONException {
         String[][] strData;
         int ncolum,nrow;
-        JSONObject json= new JSONObject(downloadData(url+"getData.php?t="+table+"&c="+columns+"&w="+where,"GET"));//Descargo el archivo JSON
+        String responde = downloadData(url+"getData.php?t="+table+"&c="+columns+"&w="+where, "GET");//Descargo el archivo JSON
+        if(responde.contains("Empty Data")) return new String[0][0];
+        JSONObject json= new JSONObject(responde);
         JSONArray tmp = json.getJSONArray("data");
         ncolum = tmp.getJSONObject(0).length()/2;
         nrow = tmp.length();
@@ -174,9 +181,24 @@ public class ConexionApiRest {
         BufferedReader in;
         StringBuffer response;
         String inputLine;
+        String params;
+        HttpsURLConnection con;
 
-        HttpsURLConnection con = setHtpps(URL);
-        con.setRequestMethod(med);
+        if(med.equals("GET")){
+            con = setHtpps(URL);
+            con.setRequestMethod(med);
+        }
+        else{
+            params = URL.split("\\?")[1];
+
+            con = setHtpps(URL.split("\\?")[0]);
+            con.setRequestMethod(med);
+            con.setDoOutput(true);
+            DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+            wr.writeBytes(params);
+            wr.flush();
+            wr.close();
+        }
         if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
 
             in = new BufferedReader( new InputStreamReader(con.getInputStream()));
