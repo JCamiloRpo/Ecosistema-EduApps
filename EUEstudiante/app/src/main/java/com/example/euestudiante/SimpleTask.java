@@ -24,13 +24,6 @@ public class SimpleTask extends AsyncTask<String[], Float, String> {
         this.isDescarga = isDescarga;
     }
 
-<<<<<<< HEAD
-    /**
-     * Lo ejecuta el hilo principal antes de que inicie el hilo hijo
-     * Deshabilita el boton de descarga y muestra la ventana de dialogo
-     */
-=======
->>>>>>> f61d18877efb9fc2cbfa1ab33c1305109b1437c0
     @Override
     protected void onPreExecute() {
         try {
@@ -43,15 +36,6 @@ public class SimpleTask extends AsyncTask<String[], Float, String> {
         }
     }
 
-<<<<<<< HEAD
-    /**
-     * Lo ejecuta el hilo hijo en segundo plano
-     * Empieza la descargar o carga de los n archivos
-     * @param params
-     * @return
-     */
-=======
->>>>>>> f61d18877efb9fc2cbfa1ab33c1305109b1437c0
     @Override
     protected String doInBackground(final String[][] params) {
         String resul="";
@@ -75,14 +59,6 @@ public class SimpleTask extends AsyncTask<String[], Float, String> {
         return resul;
     }
 
-<<<<<<< HEAD
-    /**
-     * Lo ejecuta el hilo hijo despues de terminar su codigo
-     * Habilita el boton de descargar y cierra la ventana de dialogo
-     * @param result
-     */
-=======
->>>>>>> f61d18877efb9fc2cbfa1ab33c1305109b1437c0
     @Override
     protected void onPostExecute(String result) {
         try {
@@ -91,23 +67,11 @@ public class SimpleTask extends AsyncTask<String[], Float, String> {
             else Toast.makeText(item.getContext(), "Carga exitosa", Toast.LENGTH_SHORT).show();
             dialog.dismiss();
             MainActivity.client.disconnect();
-<<<<<<< HEAD
-
-=======
->>>>>>> f61d18877efb9fc2cbfa1ab33c1305109b1437c0
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-<<<<<<< HEAD
-    /**
-     * Si se llega cancelar por alguna razon para el hilo hijo
-     * Habilita el boton de descargar y cierra la ventana de dialogo
-     * @param result
-     */
-=======
->>>>>>> f61d18877efb9fc2cbfa1ab33c1305109b1437c0
     @Override
     protected void onCancelled(String result) {
         try {
@@ -122,23 +86,10 @@ public class SimpleTask extends AsyncTask<String[], Float, String> {
 
     }
 
-<<<<<<< HEAD
-    /**
-     * Lo ejecuata el hilo hijo por si se quiere mostrar una barra de progreso
-     * @param values
-     */
-=======
->>>>>>> f61d18877efb9fc2cbfa1ab33c1305109b1437c0
     @Override
     protected void onProgressUpdate(Float... values) {
     }
 
-<<<<<<< HEAD
-    /**
-     * Metodo auxiliar para mostar la ventana de dialogo por si se desea cancelar la descarga
-     */
-=======
->>>>>>> f61d18877efb9fc2cbfa1ab33c1305109b1437c0
     private void alert(){
         TextView actividad, id, descripcion;
         Button btnCancelar;
@@ -148,10 +99,6 @@ public class SimpleTask extends AsyncTask<String[], Float, String> {
         AlertDialog.Builder message = new AlertDialog.Builder(item.getContext());
         View ventana = LayoutInflater.from(item.getContext()).inflate(R.layout.dialog_descarga,null);
         message.setView(ventana);
-<<<<<<< HEAD
-        message.setCancelable(false);
-=======
->>>>>>> f61d18877efb9fc2cbfa1ab33c1305109b1437c0
         dialog = message.create();
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 

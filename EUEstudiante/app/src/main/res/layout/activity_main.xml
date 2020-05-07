@@ -51,11 +51,7 @@
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="30dp"
                 android:layout_marginBottom="10dp"
-<<<<<<< HEAD
-                android:background="@drawable/sp_style"
-=======
                 android:background="#ffffff"
->>>>>>> f61d18877efb9fc2cbfa1ab33c1305109b1437c0
                 android:dropDownWidth="match_parent"
                 android:entries="@array/tipoident"
                 android:fontFamily="sans-serif-light"

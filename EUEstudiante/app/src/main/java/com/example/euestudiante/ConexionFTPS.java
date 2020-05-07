@@ -135,13 +135,6 @@ public class ConexionFTPS {
         if(!r) throw new Exception("No se pudo descargar el archivo: "+fileName+" del servidor FTPS");
     }
 
-<<<<<<< HEAD
-    /**
-     * @param args Cada posicion corresponde a una linea a escribir en un archivo que se llama args[0]
-     * @throws IOException
-     */
-=======
->>>>>>> f61d18877efb9fc2cbfa1ab33c1305109b1437c0
     private void report(String[] args) throws IOException {
         String local ="storage/emulated/0/FTP/Reportes", name=args[0]; //El primer argumento corresponde al nombre del archivo que se va a escribir
         File folder = new File(local); //Se crea el objeto para crear los directorios necesarios
