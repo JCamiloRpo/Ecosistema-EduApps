@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">EU Profesor</string>
+    <string name="logo">logo</string>
+    <string name="sesiones">Sesiones de la clase</string>
+    <string name="id_sesion">Id sesion</string>
+    <string name="proposito">Proposito</string>
+    <string name="fecha_inicio">Fecha inicio</string>
+    <string name="fecha_cierre">Fecha cierre</string>
+    <string name="dd_mm_aaaa">AAAA/MM/DD</string>
+    <string name="area">Area</string>
+    <string name="nueva_sesion">nueva sesion</string>
+    <string name="agregar">Agregar</string>
+    <string name="actividad">Actividad</string>
+    <string name="descripcion_de_la_actividad">Descripcion de la actividad</string>
+    <string name="tiempo">Tiempo</string>
+    <string name="recurso">Recurso</string>
+    <string name="actividades_de_la_sesion">Actividades de la sesion</string>
+    <string name="mariadb">https://192.168.1.53/ApiRest/</string>
+    <string name="iniciar_sesion">Iniciar sesion</string>
+    <string name="detalles">Detalles</string>
+    <string-array name="areas">
+        <item>Areas</item>
+        <item>Admin</item>
+    </string-array>
+</resources>
