@@ -1,6 +1,7 @@
 package com.example.euestudiante;
 
 import org.json.JSONArray;
+<<<<<<< HEAD
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.BufferedInputStream;
@@ -12,6 +13,15 @@ import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.security.InvalidKeyException;
+=======
+import org.json.JSONObject;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+>>>>>>> f61d18877efb9fc2cbfa1ab33c1305109b1437c0
 import java.security.KeyStore;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
@@ -22,6 +32,7 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManagerFactory;
 
+<<<<<<< HEAD
 public class ConexionApiRest {
 
     private String url;
@@ -151,6 +162,20 @@ public class ConexionApiRest {
         String[][] strData;
         int ncolum,nrow;
         JSONObject json= new JSONObject(downloadData(url+"postData.php?t="+table+"&c="+column+"&v="+value+"&w="+where,"POST"));//Descargo el archivo JSON
+=======
+public abstract class ConexionApiRest {
+
+    /**
+     * Obtener los datos en un array donde la primera columnas son los nombres y la segundo el valor
+     * {{"column1","value"},
+     * {"column2","value"}...)
+     * @param url localizacion del recurso
+     */
+    public static String[][] getData(String url) throws Exception {
+        String[][] strData;
+        int ncolum,nrow;
+        JSONObject json= new JSONObject(downloadData(url));//Descargo el archivo JSON
+>>>>>>> f61d18877efb9fc2cbfa1ab33c1305109b1437c0
         JSONArray tmp = json.getJSONArray("data");
         ncolum = tmp.getJSONObject(0).length()/2;
         nrow = tmp.length();
@@ -166,17 +191,27 @@ public class ConexionApiRest {
 
     /**
      * Descargar todo el JSON
+<<<<<<< HEAD
      * @param URL API LINK a descargar
      * @param med el metodo para llamar al URL (GET o POST)
      * @return devuelve el JSON en un string
      */
     private String downloadData(String URL, String med) throws InvalidKeyException, IOException, IllegalAccessException {
+=======
+     * @param URL localizacion del recurso
+     */
+    public static String downloadData(String URL) throws Exception {
+>>>>>>> f61d18877efb9fc2cbfa1ab33c1305109b1437c0
         BufferedReader in;
         StringBuffer response;
         String inputLine;
 
         HttpsURLConnection con = setHtpps(URL);
+<<<<<<< HEAD
         con.setRequestMethod(med);
+=======
+        con.setRequestMethod("GET");
+>>>>>>> f61d18877efb9fc2cbfa1ab33c1305109b1437c0
         if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
 
             in = new BufferedReader( new InputStreamReader(con.getInputStream()));
@@ -188,6 +223,7 @@ public class ConexionApiRest {
             return response.toString();
         }
         else
+<<<<<<< HEAD
             throw new IllegalAccessException("No se puede pueden obtener los datos de: "+URL);
     }
 
@@ -197,11 +233,21 @@ public class ConexionApiRest {
      * @return la conexion establecida
      */
     private HttpsURLConnection setHtpps(String urlString) throws InvalidKeyException {
+=======
+            throw new Exception("No se puede pueden obtener los datos de: "+URL);
+    }
+
+    private static HttpsURLConnection setHtpps(String urlString) throws Exception {
+>>>>>>> f61d18877efb9fc2cbfa1ab33c1305109b1437c0
         try
         {
             CertificateFactory cf = CertificateFactory.getInstance("X.509");
 
+<<<<<<< HEAD
             InputStream caInput = new BufferedInputStream(MainActivity.context.getAssets().open("certificado.cer"));
+=======
+            InputStream caInput = new BufferedInputStream(MainActivity.context.getAssets().open("server.cer"));
+>>>>>>> f61d18877efb9fc2cbfa1ab33c1305109b1437c0
             Certificate ca = cf.generateCertificate(caInput);
             //System.out.println("ca=" + ((X509Certificate) ca).getSubjectDN());
             caInput.close();
@@ -231,7 +277,11 @@ public class ConexionApiRest {
         }
         catch (Exception ex)
         {
+<<<<<<< HEAD
             throw new InvalidKeyException("Error en el certificado");
+=======
+            throw new Exception("Error en el certificado");
+>>>>>>> f61d18877efb9fc2cbfa1ab33c1305109b1437c0
         }
     }
 }

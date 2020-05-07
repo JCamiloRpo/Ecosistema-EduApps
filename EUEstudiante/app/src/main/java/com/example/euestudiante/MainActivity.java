@@ -14,7 +14,10 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
     public static ConexionFTPS client;
+<<<<<<< HEAD
     public static ConexionApiRest apiRest;
+=======
+>>>>>>> f61d18877efb9fc2cbfa1ab33c1305109b1437c0
     public static String ID="0";
     public static Context context;
     private EditText idSesion, numIdent;
@@ -32,10 +35,13 @@ public class MainActivity extends AppCompatActivity {
         numIdent = findViewById(R.id.edit_numIdent);
     }
 
+<<<<<<< HEAD
     /**
      * Validar los campos para poder inicial sesion
      * @param v
      */
+=======
+>>>>>>> f61d18877efb9fc2cbfa1ab33c1305109b1437c0
     public void btnSesion(View v){
         //Utilizar API para conexion con base de datos
         Intent i = new Intent(this, ActividadActivity.class);
@@ -53,24 +59,44 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+<<<<<<< HEAD
      * Metodo para establecer la conexion con el servidor MariaDB por medio de la clase de ConexionApiRest
+=======
+     * Metodo para establecer la conexion con el servidor MariaDB por medio de la clase de ConexionMariaDB
+>>>>>>> f61d18877efb9fc2cbfa1ab33c1305109b1437c0
      */
     private boolean connectMariaDB(){
         //Me conecto con el servidor de base de datos
         String ftps, user, pass;
         try {
+<<<<<<< HEAD
             apiRest = new ConexionApiRest(getString(R.string.mariadb));
             String[][] data = apiRest.getData( "FTPS");
+=======
+            String[][] data = ConexionApiRest.getData( getString(R.string.consulta)+"FTPS");
+>>>>>>> f61d18877efb9fc2cbfa1ab33c1305109b1437c0
             ftps = data[0][1];
             user = data[0][2];
             pass = data[0][3];
             if(connectFTPS(ftps,user,pass)){
+<<<<<<< HEAD
                 //Validar que la sesion y el estudiante existe
                 if(apiRest.getData("Sesiones","ID","ID="+ID).length == 1 &&
                         apiRest.getData("Estudiante","ID","Identificacion="+numIdent.getText().toString()).length == 1)
                     return true;
 
                 Toast.makeText(getApplicationContext(), "No existe la sesion con ID = "+ID, Toast.LENGTH_SHORT).show();
+=======
+                //Validar que la sesion existe
+                data = ConexionApiRest.getData(getString(R.string.consulta)+"Sesiones/Descripcion/?w=ID:"+idSesion.getText().toString());
+                if(data.length == 1)
+                    return true;
+                else{
+                    Toast.makeText(getApplicationContext(), "No existe la sesion con ID = "+idSesion.getText().toString(), Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+
+>>>>>>> f61d18877efb9fc2cbfa1ab33c1305109b1437c0
             }
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), "Error ApiRest: "+e.getMessage(), Toast.LENGTH_SHORT).show();
