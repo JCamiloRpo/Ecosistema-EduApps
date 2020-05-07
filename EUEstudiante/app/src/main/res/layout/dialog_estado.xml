@@ -49,7 +49,7 @@
             android:layout_marginStart="30dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="30dp"
-            android:layout_marginBottom="50dp"
+            android:layout_marginBottom="120dp"
             android:background="@drawable/sp_style"
             android:dropDownWidth="match_parent"
             android:entries="@array/estado"

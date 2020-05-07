@@ -102,12 +102,17 @@ public class ActividadActivity extends AppCompatActivity {
                         else
                             nOther++;
                     }
-                    fileNames = nImg==0 ? "" : nImg==1 ? nImg+" imagen ":nImg+" imagenes ";
-                    fileNames += nDoc==0 ? "" : nDoc==1 ? nDoc+" documento " : nDoc+" documentos ";
-                    fileNames += nApk==0 ? "" : nApk==1 ? nApk+" aplicación " : nApk+" aplicaciones ";
-                    fileNames += nVideo==0 ? "" : nVideo==1 ? nVideo+" video " : nVideo+" videos ";
-                    fileNames += nAudio==0 ? "" : nAudio==1 ? nAudio+" audio " : nAudio+" audios ";
-                    fileNames += nOther==0 ? "" : nOther==1 ? nOther+" otro archivo " : nOther+" otros archivos ";
+                    if(files.length>0){
+                        fileNames = nImg==0 ? "" : nImg==1 ? nImg+" imagen ":nImg+" imagenes ";
+                        fileNames += nDoc==0 ? "" : nDoc==1 ? nDoc+" documento " : nDoc+" documentos ";
+                        fileNames += nApk==0 ? "" : nApk==1 ? nApk+" aplicación " : nApk+" aplicaciones ";
+                        fileNames += nVideo==0 ? "" : nVideo==1 ? nVideo+" video " : nVideo+" videos ";
+                        fileNames += nAudio==0 ? "" : nAudio==1 ? nAudio+" audio " : nAudio+" audios ";
+                        fileNames += nOther==0 ? "" : nOther==1 ? nOther+" otro archivo " : nOther+" otros archivos ";
+                    }
+                    else{
+                        fileNames = "No hay archivos.";
+                    }
 
                     actividads.add(new Actividad("Actividad "+(i+1), data[i][2], data[i][3]+" minutos", fileNames,
                             (ImageButton)findViewById(R.id.btnDescargar),(ImageButton)findViewById(R.id.btnExpand), (ImageButton)findViewById(R.id.btnEstado)));
