@@ -13,9 +13,25 @@
     <string name="nro_sesion">NÚMERO\nSESIÓN</string>
     <string name="actividad">ACTIVIDADES</string>
     <string name="logo">Logo EduApps</string>
+    <string name="actividades_de_la_sesi_n_de_clase">ACTIVIDADES DE LA SESIÓN DE CLASE</string>
+    <string name="tiempo">Tiempo:</string>
+    <string name="recurso">Recursos:</string>
+    <string name="separador">-</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="mariadb">https://192.168.1.53/ApiRest/</string>
+    <string name="sincronizar">Sincronizar</string>
+    <string name="estado_actividad">Estado actividad</string>
+    <string name="detalles">Detalles</string>
+    <string name="cambiar">Cambiar</string>
     <string-array name="tipoident">
         <item>Tipo de identificación</item>
         <item>TI</item>
         <item>CC</item>
+    </string-array>
+    <string-array name="estado">
+        <item>Cambiar estado</item>
+        <item>Iniciada</item>
+        <item>Finalizada</item>
+        <item>Abandonada</item>
     </string-array>
 </resources>

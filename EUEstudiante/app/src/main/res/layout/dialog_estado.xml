@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="30dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginEnd="30dp"
+    android:layout_marginBottom="20dp"
+    android:background="@drawable/btn_style"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/text_estadoactividad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="15dp"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:text="@string/estado_actividad"
+            android:textColor="#ffffff"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            tools:layout_conversion_absoluteHeight="22dp"
+            tools:layout_conversion_absoluteWidth="98dp"
+            tools:layout_editor_absoluteX="11dp"
+            tools:layout_editor_absoluteY="224dp" />
+
+        <View
+            android:id="@+id/vwSeparator"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="#FFFFFF" />
+
+        <Spinner
+            android:id="@+id/spEstado"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="50dp"
+            android:background="@drawable/sp_style"
+            android:dropDownWidth="match_parent"
+            android:entries="@array/estado"
+            android:fontFamily="sans-serif-light"
+            android:spinnerMode="dropdown"
+            android:textAlignment="inherit"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnCambiarEstado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn_style2"
+            android:text="@string/cambiar"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnCancelarEstado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn_style_secundary_2"
+            android:text="@string/cancelar"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+</LinearLayout>
