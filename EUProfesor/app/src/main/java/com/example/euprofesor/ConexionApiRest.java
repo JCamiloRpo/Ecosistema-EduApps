@@ -1,8 +1,9 @@
-package com.example.euestudiante;
+package com.example.euprofesor;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -10,13 +11,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.security.InvalidKeyException;
 import java.security.KeyStore;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
+
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -76,7 +76,7 @@ public class ConexionApiRest {
     public String[][] getData(String table, String columns) throws IllegalAccessException, InvalidKeyException, IOException, JSONException {
         String[][] strData;
         int ncolum,nrow;
-        String responde = downloadData(url+"getData.php?t="+table, "GET");//Descargo el archivo JSON
+        String responde = downloadData(url+"getData.php?t="+table+"&c="+columns, "GET");//Descargo el archivo JSON
         if(responde.contains("Empty Data")) return new String[0][0];
         JSONObject json= new JSONObject(responde);
         JSONArray tmp = json.getJSONArray("data");

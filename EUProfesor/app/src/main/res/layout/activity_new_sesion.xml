@@ -17,7 +17,7 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/image_log2"
+                android:id="@+id/imgLogo"
                 android:layout_width="match_parent"
                 android:layout_height="124dp"
                 android:layout_marginStart="20dp"
@@ -47,7 +47,7 @@
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="30dp"
                 android:layout_marginBottom="10dp"
-                android:background="#ffffff"
+                android:background="@drawable/sp_style"
                 android:entries="@array/areas"
                 android:fontFamily="sans-serif-light"
                 android:spinnerMode="dropdown"
@@ -88,6 +88,7 @@
                 android:layout_marginEnd="30dp"
                 android:background="@drawable/btn_style"
                 android:fontFamily="sans-serif-light"
+                android:onClick="btnAgregar"
                 android:padding="10dp"
                 android:text="@string/agregar"
                 android:textColor="#FFFFFF"

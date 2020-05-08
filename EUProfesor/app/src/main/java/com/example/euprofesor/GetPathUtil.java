@@ -1,4 +1,4 @@
-package com.example.euestudiante;
+package com.example.euprofesor;
 
 import android.content.ContentUris;
 import android.content.Context;
