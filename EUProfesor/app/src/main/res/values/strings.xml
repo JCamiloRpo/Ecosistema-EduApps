@@ -15,7 +15,7 @@
     <string name="tiempo">Tiempo</string>
     <string name="recurso">Recurso</string>
     <string name="actividades_de_la_sesion">Actividades de la sesion</string>
-    <string name="mariadb">https://192.168.1.53/ApiRest/</string>
+    <string name="mariadb">https://192.168.0.101/ApiRest/</string>
     <string name="iniciar_sesion">Iniciar sesion</string>
     <string name="detalles">Detalles</string>
     <string-array name="areas">

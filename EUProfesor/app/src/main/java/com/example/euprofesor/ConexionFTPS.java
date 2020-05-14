@@ -1,6 +1,10 @@
 package com.example.euprofesor;
 
+import android.os.Environment;
+
 import org.apache.commons.net.ftp.FTP;
+import org.apache.commons.net.ftp.FTPCmd;
+import org.apache.commons.net.ftp.FTPReply;
 import org.apache.commons.net.ftp.FTPSClient;
 
 import java.io.BufferedWriter;
@@ -73,7 +77,12 @@ public class ConexionFTPS {
         if(!isConnected())
             throw new Exception("Debe conectarse al servidor SFTP.");
 
-        client.changeWorkingDirectory(ftpPath+"/");// Nos ubicamos en el directorio del FTP.
+        if(!client.changeWorkingDirectory(ftpPath))
+            if(!client.makeDirectory(ftpPath))
+                throw new Exception("No quiero crear:"+ftpPath+" "+client.getReplyString());
+
+        if(!client.changeWorkingDirectory(ftpPath))
+            throw new Exception("No quiero moverme:"+client.getReplyString());;// Nos ubicamos en el directorio del FTP.
 
         InputStream tmp = new FileInputStream(localFile); //Crear un obtjeto del archivo a subir
 
@@ -93,6 +102,7 @@ public class ConexionFTPS {
                 "Ancho de banda: "+format.format(anchobanda)+" Mb/s","Tamaño archivo: "+format.format(lengthtotal)+" MB",
                 "Duracion: "+format.format(segundosTranscurridos)+" s","Velocidad promedio: "+format.format(velocidad)+" MB/s"};
         report(args);
+
         if(!r) throw new Exception("No se pudo subir el archivo: "+fileName+" al servidor FTPS");
     }
 
@@ -140,7 +150,8 @@ public class ConexionFTPS {
      * @throws IOException
      */
     private void report(String[] args) throws IOException {
-        String local ="storage/emulated/0/FTP/Reportes", name=args[0]; //El primer argumento corresponde al nombre del archivo que se va a escribir
+        String local = Environment.getExternalStorageDirectory()+"/FTP/Reportes";
+        String name = args[0]; //El primer argumento corresponde al nombre del archivo que se va a escribir
         File folder = new File(local); //Se crea el objeto para crear los directorios necesarios
         if(!folder.exists())//Solo se crean si no existe
             if(!folder.mkdirs())

@@ -1,8 +1,8 @@
 package com.example.euprofesor;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -10,10 +10,10 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import org.json.JSONException;
+import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.File;
 import java.io.IOException;
-import java.security.InvalidKeyException;
 import java.util.ArrayList;
 
 public class NewSesionActivity extends AppCompatActivity {
@@ -21,6 +21,7 @@ public class NewSesionActivity extends AppCompatActivity {
     private EditText proposito, fechaInicio, fechaCierre;
     private Spinner areas;
     private ArrayList<String> nombreareas;
+    private Button btnAgregar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +32,7 @@ public class NewSesionActivity extends AppCompatActivity {
         areas = findViewById(R.id.sp_areas);
         fechaInicio = findViewById(R.id.edit_fechainicio);
         fechaCierre = findViewById(R.id.edit_fechacierre);
+        btnAgregar = findViewById(R.id.btn_agregar);
 
         nombreareas = new ArrayList<>();
         consultar();
@@ -61,33 +63,67 @@ public class NewSesionActivity extends AppCompatActivity {
             Toast.makeText(this, "La fecha de cierre no tiene el formato correcto (AAAA-MM-DD)", Toast.LENGTH_SHORT).show();
         else{
             try {
+                File ruta = new File(Environment.getExternalStorageDirectory()+ "/FTP/Subir");
+                if(!ruta.exists()){
+                    Toast.makeText(this,"Debe ubicar los archivos en: "+ruta.getAbsolutePath(),Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 //Inserto una nueva sesion
-                String[][] data = MainActivity.apiRest.setData("sesiones","ID,Area_ID,Descripcion,Fecha_Creacion,Fecha_Cierre",
+                String[][] data = MainActivity.apiRest.setData("Sesiones","ID,Area_ID,Descripcion,Fecha_Creacion,Fecha_Cierre",
                         "0,"+MainActivity.idArea+","+proposito+","+fechaInicio+","+fechaCierre);
+
+                if(data.length==0){
+                    Toast.makeText(this,"No se pudo crear la sesion",Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 String profe="oscar";
                 String idSesion= data[0][0];
                 String actividad;
+                String local="";
+                String remote="";
+                String names ="";
                 int tiempo = 20;
 
                 //Con el ID de la nueva sesion, inserto las actividades
                 for(int i=0; i<3; i++){
                     actividad="Descripcion de la actividad estatica "+(i+1);
-                    data = MainActivity.apiRest.setData("actividades","ID,Sesion_ID,Descripcion,Tiempo",
+                    data = MainActivity.apiRest.setData("Actividades","ID,Sesion_ID,Descripcion,Tiempo",
                             "0,"+idSesion+","+actividad+","+tiempo);
 
                     String idActividad = data[0][0];
-                    String recurso1="home/admin/www/"+profe+"/"+idSesion+"/1/imagen.jpg";
-                    String recurso2="home/admin/www/"+profe+"/"+idSesion+"/2/documento.docx";
-                    String recurso3="home/admin/www/"+profe+"/"+idSesion+"/3/app.apk";
+                    String recurso1="/home/admin/www/"+profe+"/"+idSesion+"-sesion/"+(i+1)+"-imagen.jpg";
+                    String recurso2="/home/admin/www/"+profe+"/"+idSesion+"-sesion/"+(i+1)+"-documento.docx";
+                    String recurso3="/home/admin/www/"+profe+"/"+idSesion+"-sesion/"+(i+1)+"-app.apk";
+
+                    remote +="/home/admin/www/"+profe+"/"+idSesion+"-sesion@";
+                    remote +="/home/admin/www/"+profe+"/"+idSesion+"-sesion@";
+                    remote +="/home/admin/www/"+profe+"/"+idSesion+"-sesion@";
+
+                    names +=(i+1)+"-imagen.jpg@";
+                    names +=(i+1)+"-documento.docx@";
+                    names +=(i+1)+"-app.apk@";
+
+
+                    local += Environment.getExternalStorageDirectory()+ "/FTP/Subir/imagen.jpg@";
+                    local += Environment.getExternalStorageDirectory()+ "/FTP/Subir/documento.docx@";
+                    local += Environment.getExternalStorageDirectory()+ "/FTP/Subir/app.apk@";
 
                     //Con el ID de la actividad, inserto los recursos
-                    MainActivity.apiRest.setData("recursos","ID,Actividad_ID,Hipervinculo","0,"+idActividad+","+recurso1);
-                    MainActivity.apiRest.setData("recursos","ID,Actividad_ID,Hipervinculo","0,"+idActividad+","+recurso2);
-                    MainActivity.apiRest.setData("recursos","ID,Actividad_ID,Hipervinculo","0,"+idActividad+","+recurso3);
+                    MainActivity.apiRest.setData("Recursos","ID,Actividad_ID,Hipervinculo","0,"+idActividad+","+recurso1);
+                    MainActivity.apiRest.setData("Recursos","ID,Actividad_ID,Hipervinculo","0,"+idActividad+","+recurso2);
+                    MainActivity.apiRest.setData("Recursos","ID,Actividad_ID,Hipervinculo","0,"+idActividad+","+recurso3);
                 }
 
-                Toast.makeText(this,"Sea creado la sesion con ID: "+idSesion,Toast.LENGTH_SHORT).show();
+                //Creacion del paquete SCORM
+                /*remote+="/home/admin/www/"+profe+"/"+idSesion+"@";
+                names+="SCORM"+idSesion+"@";
+                local+=Environment.getExternalStorageDirectory()+ "/FTP/Subir/SCORM"+idSesion+"@";**/
+
+                //Se envian los vectores con las rutas donde quedaran los archivos, los nombres
+                new UploadTask().execute(remote.split("@"),names.split("@"), local.split("@"));
+
+                Toast.makeText(this,"Se ha creado la sesion con ID: "+idSesion,Toast.LENGTH_SHORT).show();
                 this.proposito.setText("");
                 this.areas.setSelection(0);
                 this.fechaInicio.setText("");
@@ -119,7 +155,7 @@ public class NewSesionActivity extends AppCompatActivity {
      */
     private void consultar(){
         try {
-            String[][] data = MainActivity.apiRest.getData("areas","Nombre");
+            String[][] data = MainActivity.apiRest.getData("Areas","Nombre");
             nombreareas.add("Areas");
             for (int i=0; i<data.length;i++)
                 nombreareas.add(data[i][0]);
@@ -129,7 +165,90 @@ public class NewSesionActivity extends AppCompatActivity {
         }
     }
 
-    /*Codigo para cargar archivos
+    private class UploadTask extends AsyncTask<String[], Float, String> {
+
+        /**
+         * Lo ejecuta el hilo principal antes de que inicie el hilo hijo
+         * Deshabilita el boton de agregar
+         */
+        @Override
+        protected void onPreExecute() {
+            try {
+                btnAgregar.setEnabled(false);
+                Toast.makeText(getApplicationContext(), "Subiendo archivos", Toast.LENGTH_SHORT).show();
+                MainActivity.ftps.connect();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        /**
+         * Lo ejecuta el hilo hijo en segundo plano
+         * Empieza la carga de los n archivos
+         * @param params
+         * @return
+         */
+        @Override
+        protected String doInBackground(final String[][] params) {
+            String resul="";
+            try {
+                float progreso=0.0f;
+                for(int i=0; i<params[2].length; i++){//Iterar sobre cada ruta
+                    MainActivity.ftps.addFile(params[0][i],params[1][i],params[2][i]);
+                    progreso+=1;
+                    publishProgress(progreso);
+                }
+            }catch (Exception e) {
+                resul = "B"+e.getMessage();
+                cancel(true);
+                e.printStackTrace();
+            }
+            return resul;
+        }
+
+        /**
+         * Lo ejecuta el hilo hijo despues de terminar su codigo
+         * Habilita el boton de agregar
+         * @param result
+         */
+        @Override
+        protected void onPostExecute(String result) {
+            try {
+                Toast.makeText(getApplicationContext(), "Carga exitosa", Toast.LENGTH_SHORT).show();
+                MainActivity.ftps.disconnect();
+                btnAgregar.setEnabled(true);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        /**
+         * Si se llega cancelar por alguna razon para el hilo hijo
+         * Habilita el boton de agregar
+         * @param result
+         */
+        @Override
+        protected void onCancelled(String result) {
+            try {
+                Toast.makeText(getApplicationContext(), "Se canceló la carga\n"+result, Toast.LENGTH_SHORT).show();
+                MainActivity.ftps.disconnect();
+                btnAgregar.setEnabled(true);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        /**
+         * Lo ejecuata el hilo hijo por si se quiere mostrar una barra de progreso
+         * @param values
+         */
+        @Override
+        protected void onProgressUpdate(Float... values) {
+        }
+    }
+
+    /*Codigo para elegir un archivo
     public void btnCargar(final View v){
         Intent i = new Intent(Intent.ACTION_GET_CONTENT);
         i.setType("* /*");
@@ -148,7 +267,7 @@ public class NewSesionActivity extends AppCompatActivity {
             String ftpPath = "/home/admin/wwww";
             String localFile = GetPathUtil.getPath(getApplicationContext(), uri);
             String name = new File(localFile).getName();
-            new SimpleTask(new View(getApplicationContext()), false).execute(ftpPath.split("@"),name.split("@"),localFile.split("@"));
+            new UploadTask(new View(getApplicationContext()), false).execute(ftpPath.split("@"),name.split("@"),localFile.split("@"));
         }
     }
     /**/
