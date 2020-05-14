@@ -47,7 +47,7 @@ public class ConexionApiRest {
      * @param table a consultar
      * @return Retorna una matriz que representa la tabla
      */
-    public String[][] getData(String table) throws IllegalAccessException, InvalidKeyException, IOException, JSONException {
+    public String[][] getData(String table) throws InvalidKeyException, IOException, JSONException {
         String[][] strData;
         int ncolum,nrow;
         String responde = downloadData(url+"getData.php?t="+table, "GET");//Descargo el archivo JSON
@@ -76,7 +76,7 @@ public class ConexionApiRest {
      * @param columns separadas por , (column1,column2,column3...)
      * @return Retorna una matriz que representa la tabla
      */
-    public String[][] getData(String table, String columns) throws IllegalAccessException, InvalidKeyException, IOException, JSONException {
+    public String[][] getData(String table, String columns) throws InvalidKeyException, IOException, JSONException {
         String[][] strData;
         int ncolum,nrow;
         String responde = downloadData(url+"getData.php?t="+table+"&c="+columns, "GET");//Descargo el archivo JSON
@@ -106,7 +106,7 @@ public class ConexionApiRest {
      * @param where condicion (ID=0, ID>0 AND ID<20)
      * @return Retorna una matriz que representa la tabla
      */
-    public String[][] getData(String table, String columns, String where) throws IllegalAccessException, InvalidKeyException, IOException, JSONException {
+    public String[][] getData(String table, String columns, String where) throws InvalidKeyException, IOException, JSONException {
         String[][] strData;
         int ncolum,nrow;
         String responde = downloadData(url+"getData.php?t="+table+"&c="+columns+"&w="+where, "GET");//Descargo el archivo JSON
@@ -132,7 +132,7 @@ public class ConexionApiRest {
      * @param values de las columnas separados por , (value1,value2,value3)
      * @return Retorna una matriz que representa la tabla
      */
-    public String[][] setData(String table, String columns, String values) throws IllegalAccessException, InvalidKeyException, IOException, JSONException {
+    public String[][] setData(String table, String columns, String values) throws InvalidKeyException, IOException, JSONException {
         String[][] strData;
         int ncolum,nrow;
         JSONObject json= new JSONObject(downloadData(url+"postData.php?t="+table+"&c="+columns+"&v="+values,"POST"));//Descargo el archivo JSON
@@ -157,7 +157,7 @@ public class ConexionApiRest {
      * @param where condicion para filtrar los registros actualizar
      * @return Retorna una matriz que representa la tabla
      */
-    public String[][] updateData(String table, String column, String value, String where) throws IllegalAccessException, InvalidKeyException, IOException, JSONException {
+    public String[][] updateData(String table, String column, String value, String where) throws InvalidKeyException, IOException, JSONException {
         String[][] strData;
         int ncolum,nrow;
         JSONObject json= new JSONObject(downloadData(url+"updateData.php?t="+table+"&c="+column+"&v="+value+"&w="+where,"POST"));//Descargo el archivo JSON
@@ -175,11 +175,24 @@ public class ConexionApiRest {
     }
 
     /**
+     * Metodo auxiliar para saber en cualquier momento si hay conexion con el API REST
+     * @return
+     */
+    public boolean isConnected() {
+        try {
+            return tryConnect(setHtpps(url));
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
      * Metodo para probar la conexion de la pagina del API REST
      * @param url El objeto de conexion para pobrar
      * @return true si se hay conexion
      */
-    public boolean tryConnect(HttpsURLConnection url){
+    private boolean tryConnect(HttpsURLConnection url){
         try {
             url.setRequestProperty("User-Agent", "Test");
             url.setRequestProperty("Connection", "close");
@@ -248,7 +261,7 @@ public class ConexionApiRest {
         {
             CertificateFactory cf = CertificateFactory.getInstance("X.509");
 
-            InputStream caInput = new BufferedInputStream(MainActivity.context.getAssets().open("certificado.cer"));
+            InputStream caInput = new BufferedInputStream(MainActivity.context.getAssets().open("server.cer"));
             Certificate ca = cf.generateCertificate(caInput);
             //System.out.println("ca=" + ((X509Certificate) ca).getSubjectDN());
             caInput.close();

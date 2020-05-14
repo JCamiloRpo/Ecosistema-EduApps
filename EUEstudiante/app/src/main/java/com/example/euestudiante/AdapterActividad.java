@@ -228,7 +228,7 @@ public class AdapterActividad extends RecyclerView.Adapter<AdapterActividad.MyVi
                             spEstados.getSelectedItemPosition(),oblocal),Integer.parseInt(MainActivity.idEstudiante),Integer.parseInt(idActividad));
 
                     //Actualizar estado remoto si estoy online
-                    if(MainActivity.online){
+                    if(MainActivity.apiRest.isConnected()){
                         try {
                             String[][] remota = MainActivity.apiRest.getData("Estudiantes_Actividades","Estado_ID,Observaciones",
                                     "Estudiante_ID:"+MainActivity.idEstudiante+"%20AND%20Actividad_ID:"+idActividad);
@@ -258,8 +258,8 @@ public class AdapterActividad extends RecyclerView.Adapter<AdapterActividad.MyVi
                             e.printStackTrace();
                         }
                     }
-                    ActividadActivity.sync = false;
-
+                    //Si llega hasta aca quiere decir que el nodo no está sincronizado
+                    ActividadActivity.btnSync.setEnabled(true);
                     Toast.makeText(itemView.getContext(), "No olvide sincronizar el estado cuando tenga conexión", Toast.LENGTH_SHORT).show();
                 }
             });
@@ -281,7 +281,7 @@ public class AdapterActividad extends RecyclerView.Adapter<AdapterActividad.MyVi
                     String localFile = Environment.getExternalStorageDirectory()+"/FTP/Archivos";
                     String fileNames="";
                     try {
-                        if(!MainActivity.online){
+                        if(!MainActivity.apiRest.isConnected()){
                             Toast.makeText(itemView.getContext(),"Debe estar online para descargar el contenido",Toast.LENGTH_SHORT).show();
                             return;
                         }

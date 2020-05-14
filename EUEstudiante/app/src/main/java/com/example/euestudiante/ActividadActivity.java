@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.euestudiante.entidades.Estudiante_Actividad;
 
+import java.security.InvalidKeyException;
 import java.util.ArrayList;
 
 public class ActividadActivity extends AppCompatActivity {
@@ -24,7 +25,7 @@ public class ActividadActivity extends AppCompatActivity {
     private RecyclerView recyclerActividad;
     private ArrayList<ActividadView> actividads;
     private String idSesion;
-    public static boolean sync;
+    public static MenuItem btnSync;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +53,8 @@ public class ActividadActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_sync, menu);
-        menu.findItem(R.id.action_sync).setEnabled(!sync);
+        btnSync = menu.findItem(R.id.action_sync);
+        btnSync.setEnabled(true);
         return true;
     }
 
@@ -69,21 +71,19 @@ public class ActividadActivity extends AppCompatActivity {
                 this.finish();
                 return true;
             case R.id.action_sync:
-                if (MainActivity.online) {
+                if (MainActivity.apiRest.isConnected()) {
+                    actividads = new ArrayList<>();
+                    AdapterActividad mAdapter = new AdapterActividad(actividads);
+                    recyclerActividad.setAdapter(mAdapter);
                     consulta();
                     Toast.makeText(getApplicationContext(), "Estados sincronizados.", Toast.LENGTH_SHORT).show();
                 } else
                     Toast.makeText(getApplicationContext(), "No puede sincronizar los estados porque está en modo offline.", Toast.LENGTH_SHORT).show();
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        invalidateOptionsMenu();
     }
 
     /**
@@ -134,7 +134,7 @@ public class ActividadActivity extends AppCompatActivity {
                 //Consultar el estado de la actividad del estudiante en el dispositivo
                 local = MainActivity.localDB.Read("Estudiantes_Actividades", "Estado_ID,Observaciones",
                         "Estudiante_ID=" + MainActivity.idEstudiante + " AND Actividad_ID=" + data[i][0]);
-                if (MainActivity.online) {
+                if (MainActivity.apiRest.isConnected()) {
                     //Consultar el estado de la actividad del estudiante en el nodo
                     remota = MainActivity.apiRest.getData("Estudiantes_Actividades", "Estado_ID,Observaciones",
                             "Estudiante_ID:" + MainActivity.idEstudiante + "%20AND%20Actividad_ID:" + data[i][0]);
@@ -158,8 +158,42 @@ public class ActividadActivity extends AppCompatActivity {
      * Metodo para sincronizar los estados de las actividades
      */
     private int Sincronizar(String estudiante, String actividad, String estremota, String estlocal, String obremota, String oblocal) {
+        int versionOriginal, versionNueva, versionRemota;
+        int estado = Integer.parseInt(estremota);
+        try {
+            //Comparar las versiones locales con las remotas
+            versionOriginal = Integer.parseInt(oblocal.split("@")[0]);
+            versionNueva = Integer.parseInt(oblocal.split("@")[1]);
+            versionRemota = Integer.parseInt(obremota.split("@")[0]);
+            if (versionNueva > versionRemota) {
+                //Actualizo la remota
+                obremota = oblocal.replace(versionOriginal+"@","");
+                MainActivity.apiRest.updateData("Estudiantes_Actividades", "Estado_ID", estlocal,
+                        "Estudiante_ID=" + estudiante + " AND Actividad_ID=" + actividad);
+                MainActivity.apiRest.updateData("Estudiantes_Actividades", "Observaciones", obremota,
+                        "Estudiante_ID=" + estudiante + " AND Actividad_ID=" + actividad);
 
-        return Integer.parseInt(estremota);
+                //Actualizo los metadatos local
+                oblocal = versionNueva + "@" + obremota;
+                MainActivity.localDB.Update(new Estudiante_Actividad(Integer.parseInt(estudiante), Integer.parseInt(actividad),
+                        Integer.parseInt(estlocal), oblocal), Integer.parseInt(estudiante), Integer.parseInt(actividad));
+                estado = Integer.parseInt(estlocal);
+            } else if (versionNueva < versionRemota || (versionNueva == versionRemota && versionOriginal < versionRemota)) {
+                //Actualizo la local
+                oblocal = versionRemota + "@" + obremota;
+                MainActivity.localDB.Update(new Estudiante_Actividad(Integer.parseInt(estudiante), Integer.parseInt(actividad),
+                        Integer.parseInt(estremota), oblocal), Integer.parseInt(estudiante), Integer.parseInt(actividad));
+
+                estado = Integer.parseInt(estremota);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //Solo cuando llega hasta acá quiere decir que los estados se sincronizaron
+        if(btnSync!=null)
+            btnSync.setEnabled(false);
+        return estado;
     }
 
 

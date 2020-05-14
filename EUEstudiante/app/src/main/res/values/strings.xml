@@ -18,7 +18,7 @@
     <string name="recurso">Recursos:</string>
     <string name="separador">-</string>
     <string name="cancelar">Cancelar</string>
-    <string name="mariadb">https://192.168.1.53/ApiRest/</string>
+    <string name="mariadb">https://192.168.0.101/ApiRest/</string>
     <string name="sincronizar">Sincronizar</string>
     <string name="estado_actividad">Estado actividad</string>
     <string name="detalles">Detalles</string>

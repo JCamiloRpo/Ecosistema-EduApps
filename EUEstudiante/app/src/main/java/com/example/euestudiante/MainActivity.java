@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
     public static ConexionLocalDB localDB;
     public static String ID="0", idEstudiante ="0";
     public static Context context;
-    public static boolean online;
     private EditText idSesion, numIdent;
     private Spinner tipoIdent;
     private Button btnSesion;
@@ -72,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         String[][] estados, estudiante, actividades, recursos, tmp;
         String oblocal;
         try{
-            if(online){
+            if(apiRest.isConnected()){
                 //Modo online
                 //Consultar tablas
                 estados = apiRest.getData("Estados");
@@ -189,10 +188,12 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Integer result) {
             btnSesion.setEnabled(true);
-            online = result==0;
-            if(result==-2)
+            if(result==0)
+                iniciar();
+            else if(result==-2)
                 Toast.makeText(MainActivity.context, "Datos incorrectos",Toast.LENGTH_SHORT).show();
-            iniciar();
+            else
+                Toast.makeText(MainActivity.context, "No hay conexion",Toast.LENGTH_SHORT).show();
         }
 
         /**
@@ -203,8 +204,12 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onCancelled(Integer result) {
             btnSesion.setEnabled(true);
-            online = false;
-            iniciar();
+            if(result==0)
+                iniciar();
+            else if(result==-2)
+                Toast.makeText(MainActivity.context, "Datos incorrectos",Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(MainActivity.context, "No hay conexion",Toast.LENGTH_SHORT).show();
         }
 
         /**
