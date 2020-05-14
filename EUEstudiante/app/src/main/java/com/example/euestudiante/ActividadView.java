@@ -2,13 +2,13 @@ package com.example.euestudiante;
 
 import android.widget.ImageButton;
 
-public class Actividad {
+public class ActividadView {
 
-    private String idActividad, descripcion, tiempo, recurso;
+    private String idActividad, descripcion, tiempo, recurso, estado;
     private ImageButton btnDescarga, btnExpand, btnEstado;
 
-    public Actividad(String idActividad, String descripcion, String tiempo, String recurso,
-                     ImageButton btnDescarga, ImageButton btnExpand, ImageButton btnEstado) {
+    public ActividadView(String idActividad, String descripcion, String tiempo, String recurso,
+                         ImageButton btnDescarga, ImageButton btnExpand, ImageButton btnEstado,String estado) {
         this.idActividad = idActividad;
         this.descripcion = descripcion;
         this.tiempo = tiempo;
@@ -16,6 +16,7 @@ public class Actividad {
         this.btnDescarga = btnDescarga;
         this.btnExpand = btnExpand;
         this.btnEstado = btnEstado;
+        this.estado = estado;
     }
 
     public String getIdActividad() {
@@ -40,5 +41,9 @@ public class Actividad {
 
     public ImageButton getBtnEstado() {
         return btnEstado;
+    }
+
+    public String getEstado() {
+        return estado;
     }
 }

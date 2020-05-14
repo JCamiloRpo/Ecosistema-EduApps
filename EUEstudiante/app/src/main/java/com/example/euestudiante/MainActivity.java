@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     public static ConexionLocalDB localDB;
     public static String ID="0", idEstudiante ="0";
     public static Context context;
-    public static boolean online = false;
+    public static boolean online;
     private EditText idSesion, numIdent;
     private Spinner tipoIdent;
     private Button btnSesion;

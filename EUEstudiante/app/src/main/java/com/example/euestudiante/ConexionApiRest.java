@@ -160,7 +160,7 @@ public class ConexionApiRest {
     public String[][] updateData(String table, String column, String value, String where) throws IllegalAccessException, InvalidKeyException, IOException, JSONException {
         String[][] strData;
         int ncolum,nrow;
-        JSONObject json= new JSONObject(downloadData(url+"postData.php?t="+table+"&c="+column+"&v="+value+"&w="+where,"POST"));//Descargo el archivo JSON
+        JSONObject json= new JSONObject(downloadData(url+"updateData.php?t="+table+"&c="+column+"&v="+value+"&w="+where,"POST"));//Descargo el archivo JSON
         JSONArray tmp = json.getJSONArray("data");
         ncolum = tmp.getJSONObject(0).length()/2;
         nrow = tmp.length();
@@ -173,7 +173,6 @@ public class ConexionApiRest {
         }
         return  strData;
     }
-
 
     /**
      * Metodo para probar la conexion de la pagina del API REST
