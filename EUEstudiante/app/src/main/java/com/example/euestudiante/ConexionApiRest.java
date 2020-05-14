@@ -3,20 +3,21 @@ package com.example.euestudiante;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.security.InvalidKeyException;
 import java.security.KeyStore;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
+
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -28,6 +29,8 @@ public class ConexionApiRest {
     private String url;
 
     /**
+     * NOTA: No se debe dejar espacio para los llamados del API y para las consultas ccmpuestas
+     * se debe separar por %20
      * Constructor que recibe el url por del servidor API REST
      * @param url ejemplo https://192.168.0.101/ApiRest/
      */
@@ -76,7 +79,7 @@ public class ConexionApiRest {
     public String[][] getData(String table, String columns) throws IllegalAccessException, InvalidKeyException, IOException, JSONException {
         String[][] strData;
         int ncolum,nrow;
-        String responde = downloadData(url+"getData.php?t="+table, "GET");//Descargo el archivo JSON
+        String responde = downloadData(url+"getData.php?t="+table+"&c="+columns, "GET");//Descargo el archivo JSON
         if(responde.contains("Empty Data")) return new String[0][0];
         JSONObject json= new JSONObject(responde);
         JSONArray tmp = json.getJSONArray("data");
@@ -171,13 +174,32 @@ public class ConexionApiRest {
         return  strData;
     }
 
+
+    /**
+     * Metodo para probar la conexion de la pagina del API REST
+     * @param url El objeto de conexion para pobrar
+     * @return true si se hay conexion
+     */
+    public boolean tryConnect(HttpsURLConnection url){
+        try {
+            url.setRequestProperty("User-Agent", "Test");
+            url.setRequestProperty("Connection", "close");
+            url.setConnectTimeout(1500);
+            url.connect();
+            return (url.getResponseCode() == 200);
+        } catch (Exception e) {
+            return false;
+        }
+
+    }
+
     /**
      * Descargar todo el JSON
      * @param URL API LINK a descargar
      * @param med el metodo para llamar al URL (GET o POST)
      * @return devuelve el JSON en un string
      */
-    private String downloadData(String URL, String med) throws InvalidKeyException, IOException, IllegalAccessException {
+    private String downloadData(String URL, String med) throws InvalidKeyException, IOException {
         BufferedReader in;
         StringBuffer response;
         String inputLine;
@@ -187,6 +209,9 @@ public class ConexionApiRest {
         if(med.equals("GET")){
             con = setHtpps(URL);
             con.setRequestMethod(med);
+
+            if(!tryConnect(con))
+                throw new ConnectException("No hay conexion.");
         }
         else{
             params = URL.split("\\?")[1];
@@ -199,18 +224,19 @@ public class ConexionApiRest {
             wr.flush();
             wr.close();
         }
+
         if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
 
             in = new BufferedReader( new InputStreamReader(con.getInputStream()));
             response = new StringBuffer();
-            while ((inputLine = in.readLine()) != null) {
+            while ((inputLine = in.readLine()) != null)
                 response.append(inputLine);
-            }
+
             in.close();
             return response.toString();
         }
         else
-            throw new IllegalAccessException("No se puede pueden obtener los datos de: "+URL);
+            return "Empty Data";
     }
 
     /**

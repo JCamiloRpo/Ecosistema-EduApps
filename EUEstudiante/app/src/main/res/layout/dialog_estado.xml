@@ -49,7 +49,7 @@
             android:layout_marginStart="30dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="30dp"
-            android:layout_marginBottom="120dp"
+            android:layout_marginBottom="20dp"
             android:background="@drawable/sp_style"
             android:dropDownWidth="match_parent"
             android:entries="@array/estado"
@@ -57,6 +57,21 @@
             android:spinnerMode="dropdown"
             android:textAlignment="inherit"
             android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/edit_Observacion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="20dp"
+            android:autofillHints=""
+            android:background="@drawable/sp_style"
+            android:ems="10"
+            android:hint="@string/observaciones"
+            android:inputType="textPersonName"
+            android:visibility="invisible"
+            tools:targetApi="o" />
 
     </LinearLayout>
 

@@ -23,6 +23,7 @@
     <string name="estado_actividad">Estado actividad</string>
     <string name="detalles">Detalles</string>
     <string name="cambiar">Cambiar</string>
+    <string name="observaciones">Observaciones</string>
     <string-array name="tipoident">
         <item>Tipo de identificación</item>
         <item>TI</item>

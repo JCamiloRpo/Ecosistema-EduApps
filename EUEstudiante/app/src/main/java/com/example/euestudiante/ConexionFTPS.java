@@ -1,5 +1,7 @@
 package com.example.euestudiante;
 
+import android.os.Environment;
+
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPSClient;
 
@@ -73,6 +75,9 @@ public class ConexionFTPS {
         if(!isConnected())
             throw new Exception("Debe conectarse al servidor SFTP.");
 
+        if(client.mlistDir(ftpPath+"/").length==0)
+            client.makeDirectory(ftpPath+"/");
+
         client.changeWorkingDirectory(ftpPath+"/");// Nos ubicamos en el directorio del FTP.
 
         InputStream tmp = new FileInputStream(localFile); //Crear un obtjeto del archivo a subir
@@ -94,6 +99,8 @@ public class ConexionFTPS {
                 "Duracion: "+format.format(segundosTranscurridos)+" s","Velocidad promedio: "+format.format(velocidad)+" MB/s"};
         report(args);
         if(!r) throw new Exception("No se pudo subir el archivo: "+fileName+" al servidor FTPS");
+
+        client.changeWorkingDirectory("/home/admin/www");
     }
 
     /**
@@ -140,7 +147,8 @@ public class ConexionFTPS {
      * @throws IOException
      */
     private void report(String[] args) throws IOException {
-        String local ="storage/emulated/0/FTP/Reportes", name=args[0]; //El primer argumento corresponde al nombre del archivo que se va a escribir
+        String local = Environment.getExternalStorageDirectory()+"/FTP/Reportes";
+        String name = args[0]; //El primer argumento corresponde al nombre del archivo que se va a escribir
         File folder = new File(local); //Se crea el objeto para crear los directorios necesarios
         if(!folder.exists())//Solo se crean si no existe
             if(!folder.mkdirs())
