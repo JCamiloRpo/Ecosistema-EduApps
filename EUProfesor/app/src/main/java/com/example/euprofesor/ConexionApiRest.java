@@ -1,5 +1,7 @@
 package com.example.euprofesor;
 
+import android.net.Network;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,8 +12,14 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
+import java.net.MalformedURLException;
+import java.net.Socket;
 import java.net.URL;
+import java.net.URLConnection;
+import java.net.UnknownHostException;
 import java.security.InvalidKeyException;
 import java.security.KeyStore;
 import java.security.cert.Certificate;
@@ -28,6 +36,8 @@ public class ConexionApiRest {
     private String url;
 
     /**
+     * NOTA: No se debe dejar espacio para los llamados del API y para las consultas ccmpuestas
+     * se debe separar por %20
      * Constructor que recibe el url por del servidor API REST
      * @param url ejemplo https://192.168.0.101/ApiRest/
      */
@@ -157,7 +167,7 @@ public class ConexionApiRest {
     public String[][] updateData(String table, String column, String value, String where) throws IllegalAccessException, InvalidKeyException, IOException, JSONException {
         String[][] strData;
         int ncolum,nrow;
-        JSONObject json= new JSONObject(downloadData(url+"postData.php?t="+table+"&c="+column+"&v="+value+"&w="+where,"POST"));//Descargo el archivo JSON
+        JSONObject json= new JSONObject(downloadData(url+"updateData.php?t="+table+"&c="+column+"&v="+value+"&w="+where,"POST"));//Descargo el archivo JSON
         JSONArray tmp = json.getJSONArray("data");
         ncolum = tmp.getJSONObject(0).length()/2;
         nrow = tmp.length();
@@ -169,6 +179,24 @@ public class ConexionApiRest {
                 strData[n][i] = row.getString(results.getString(j)); //Obtengo el valor de la columna
         }
         return  strData;
+    }
+
+    /**
+     * Metodo para probar la conexion de la pagina del API REST
+     * @param url El objeto de conexion para pobrar
+     * @return true si se hay conexion
+     */
+    public boolean tryConnect(HttpsURLConnection url){
+        try {
+            url.setRequestProperty("User-Agent", "Test");
+            url.setRequestProperty("Connection", "close");
+            url.setConnectTimeout(1500);
+            url.connect();
+            return (url.getResponseCode() == 200);
+        } catch (Exception e) {
+            return false;
+        }
+
     }
 
     /**
@@ -187,6 +215,9 @@ public class ConexionApiRest {
         if(med.equals("GET")){
             con = setHtpps(URL);
             con.setRequestMethod(med);
+
+            if(!tryConnect(con))
+                throw new IllegalAccessException("No hay conexion.");
         }
         else{
             params = URL.split("\\?")[1];
@@ -199,6 +230,7 @@ public class ConexionApiRest {
             wr.flush();
             wr.close();
         }
+
         if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
 
             in = new BufferedReader( new InputStreamReader(con.getInputStream()));
@@ -210,7 +242,7 @@ public class ConexionApiRest {
             return response.toString();
         }
         else
-            throw new IllegalAccessException("No se puede pueden obtener los datos de: "+URL);
+            return "Empty Data";
     }
 
     /**
@@ -223,7 +255,7 @@ public class ConexionApiRest {
         {
             CertificateFactory cf = CertificateFactory.getInstance("X.509");
 
-            InputStream caInput = new BufferedInputStream(MainActivity.context.getAssets().open("certificado.cer"));
+            InputStream caInput = new BufferedInputStream(MainActivity.context.getAssets().open("server.cer"));
             Certificate ca = cf.generateCertificate(caInput);
             //System.out.println("ca=" + ((X509Certificate) ca).getSubjectDN());
             caInput.close();

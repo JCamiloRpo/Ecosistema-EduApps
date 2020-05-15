@@ -109,7 +109,7 @@ if($function=="json"){
     if(!$result) die ($objectTools->JSONError (303));
     
     // QUERY Variables
-    $columns="ID,$fields";
+    $columns=$fields;
 
     $objectTools->getData($table,$columns,$order,$sort,$limit,$where,$format,$option);
     

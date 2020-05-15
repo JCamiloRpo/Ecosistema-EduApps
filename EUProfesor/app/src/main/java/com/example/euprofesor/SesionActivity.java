@@ -86,7 +86,7 @@ public class SesionActivity extends AppCompatActivity {
 
         try {
             //Consultar todas las sesiones del area 1
-            data = MainActivity.apiRest.getData("sesiones");
+            data = MainActivity.apiRest.getData("Sesiones");
             for(int i=0; i< data.length; i++) {
                 if (data[i][1].equals(MainActivity.idArea)) {// ID | Area_ID | Descripcion/Proposito | FechaInicio | FechaCierre
                     sesions.add(new Sesion(data[i][0], MainActivity.area, data[i][2], data[i][3], data[i][4]));

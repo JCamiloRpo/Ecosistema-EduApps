@@ -109,7 +109,7 @@ if($function=="json"){
     
     // QUERY Variables
     $columns=$fields;
-    $order="ID";
+    $order="1";
     $sort="desc";
     $limit="0,1";
 
