@@ -395,7 +395,7 @@ public class ConexionSCORM {
 		private final String footer = "<footer class='not_print'>\r\n" +
 				"            <div class='measuring-progress'></div>\r\n" + 
 				"\r\n" + 
-				"            <nav label='Caracter�sticas globales' class='globals'>\r\n" + 
+				"            <nav label='Caracteristicas globales' class='globals'>\r\n" + 
 				"                <menu>\r\n" + 
 				"                    <menuitem data-global-id='results'><i title='Progreso' class='ion-clipboard tooltip' data-position-at='top'></i></menuitem>\r\n" + 
 				"                    <menuitem data-global-id='return'>\r\n" + 
@@ -423,7 +423,6 @@ public class ConexionSCORM {
 				"        <h3>Actividades de aprendizaje</h3>\r\n" + 
 				"        <div id='results_page_activities'></div>\r\n" + 
 				"    </div>\r\n" + 
-				"\r\n" + 
 				"    <div id='printent_content' style='display:none;'>\r\n" + 
 				"        <div class='content'></div>\r\n" + 
 				"        <div class='button_container'>\r\n" + 

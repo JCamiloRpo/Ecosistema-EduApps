@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Actividades de la sesion</title>
+
+
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no'>
+
+    <link rel='shortcut icon' href='img/icon.svg'>
+    <link href='components/jquery/css/custom/jquery-ui.min.css' rel='stylesheet' type='text/css'>
+    <link href='components/ionicons/css/ionicons.min.css' rel='stylesheet' type='text/css'>
+    <link href='components/pit/css/jpit_quiz.css' rel='stylesheet' type='text/css'>
+    <link href='components/pit/css/jpit_mark.css' rel='stylesheet' type='text/css'>
+    <link href='components/pit/css/jpit_wordpuzzle.css' rel='stylesheet' type='text/css'>
+    <link href='components/pit/css/jpit_crossword.css' rel='stylesheet' type='text/css'>
+    <link href='components/pit/css/jpit_zoom.css' rel='stylesheet' type='text/css'>
+    <link href='components/csscircle/circle.min.css' rel='stylesheet' type='text/css'>
+    <link rel='stylesheet' href='components/twentytwenty/css/twentytwenty.css' type='text/css' media='screen' />
+    <link rel='stylesheet' href='components/mediaelementjs/mediaelementplayer.css' type='text/css' />
+
+    <script src='components/jquery/jquery.min.js'></script>
+    <script src='components/jquery/jquery-ui.min.js'></script>
+    <script type='text/javascript' src='components/jquery-mobile/jquery.ui.touch-punch.min.js'></script>
+    <script src='components/twentytwenty/js/jquery.event.move.js' type='text/javascript'></script>
+    <script src='components/twentytwenty/js/jquery.twentytwenty.js' type='text/javascript'></script>
+    <script src='components/mediaelementjs/mediaelement-and-player.min.js' type='text/javascript'></script>
+    <script src='components/maphilight/jquery.maphilight.min.js' type='text/javascript'></script>
+    <script src='components/interact/interact.min.js'></script>
+    <script src='components/pit/jpit_api.js'></script>
+    <script src='components/pit/utilities/jpit_utilities.js'></script>
+    <script src='components/pit/activity/jpit_activity.js'></script>
+    <script src='components/pit/resources/jpit_resource.js'></script>
+    <script src='components/pit/activity/quiz/jpit_activity_quiz.js'></script>
+    <script src='components/pit/activity/mark/jpit_activity_mark.js'></script>
+    <script src='components/pit/activity/wordpuzzle/jpit_activity_wordpuzzle.js'></script>
+    <script src='components/pit/activity/droppable/jpit_activity_droppable.js'></script>
+    <script src='components/pit/activity/crossword/jpit_activity_crossword.js'></script>
+    <script src='components/pit/activity/cloze/jpit_activity_cloze.js'></script>
+    <script src='components/pit/activity/form/jpit_activity_form.js'></script>
+    <script src='components/pit/activity/sortable/jpit_activity_sortable.js'></script>
+    <script src='components/pit/activity/check/jpit_activity_check.js'></script>
+    <script src='components/pit/resources/movi/jpit_resource_movi.js'></script>
+    <script src='components/pit/resources/zoom/jpit_resource_zoom.js'></script>
+    <script src='js/app.js'></script>
+    <script src='js/init.js'></script>
+    <script src='js/lang.es.js'></script>
+    <script src='js/lib.js'></script>
+    <script src='js/mobilelib.js'></script>
+    <script src='js/stories.js'></script>
+    <script src='components/scorm/SCORM_12_APIWrapper.js'> </script>
+    <script src='components/scorm/scorm_api.js'> </script>
+    
+    <style type='text/css'>
+
+        body {
+            background-color: rgba(242, 242, 242, 0.7);
+        }
+
+        body.loading {
+            text-align: center;
+        }
+
+        body.loading:after {
+            content: ';
+            background: url(img/loading.gif) no-repeat bottom center;
+            width: 130px;
+            height: 30px;
+            display: block;
+            margin: auto;
+            padding-bottom: 20px;
+        }
+
+        body.loading #body {
+            display: none;
+        }
+    </style>
+</head> 
+<body class='loading' data-debug='true' data-model='scorm' data-display-mode='onlypages' data-approve-limit='70' data-activities-percentaje='60' data-mobile-mode='512'>
+    <div id='body' class='not_print'>
+        <div id='not_scorm_msg' style='display: none;'></div>
+        <header>
+            <h1>Actividades de la sesion</h1>
+            <nav label='Principal' class='horizontal main' data-offset='true'>
+                <menu>
+                    <menuitem label='Presentacion' data-page='pag-inicio'></menuitem>
+                    <menuitem label=' [actividad] ' data-page='[idactividad]'></menuitem>
+                    <!--item-->
+                </menu>
+            </nav>
+            <h2 class='page-title'></h2>
+        </header> 
+        <main style='display: none;'>
+			<section id='pag-inicio'> 
+                <div class='subpage'>
+                    <h3> [titulo] </h3>
+                    <p>
+                        [descripcion]
+                    </p>
+                </div> 
+            </section>
+            <section id='[idactividad]'>
+                <div class='subpage'>
+                    <h3> [actividad] </h3> 
+                    <p>
+                       [descactividad] 
+                    </p>
+                    <div class='box-text important' label=' [recurso] '>
+                        <p>
+                            [descrecurso]
+                        </p>
+                        <p>
+                            <audio controls>
+                                <source src=' [path] ' type=' [type] '>
+                                Su navegador no soporta el componente de audio
+                            </audio>
+                            <div class='about'>
+                               <a href='[path]' download='[name]'>
+                                   Descargar recurso
+                               </a>
+                            </div>
+                        </p>
+                    </div>
+                    <div class='box-text important' label=' [recurso] '>
+                        <p>
+                            [descrecurso]
+                        </p>
+                        <p>
+                            <div class='videobox'>
+                                <video controls>
+                                    <source src=' [path] ' type=' [type] '>
+                                    El reproductor de video no es soportado por el navegador
+                                   </video>
+                            </div>
+                            <div class='about'>
+                               <a href='[path]' download='[name]'>
+                                   Descargar recurso
+                               </a>
+                            </div>
+                        </p>
+                    </div>
+                    <div class='box-text important' label=' [recurso] '>
+                        <p>
+                            [descrecurso] 
+                        </p>
+                        <p>
+                            <div class='expand-image' data-src=' [path] ' title=' [name] '></div>
+                            <div class='about'>
+                               <a href='[path]' download='[name]'>
+                                   Descargar recurso
+                               </a>
+                            </div>
+                        </p>
+                    </div>
+                    <div class='box-text important' label=' [recurso] '>
+                        <p>
+                            [descrecurso]
+                        </p>
+                        <p>
+                            <div class='about'>
+                               <a href='[path]' download='[name]'>
+                                   Descargar recurso
+                               </a>
+                            </div>
+                        </p>
+                    </div>
+                    <!--recurso--> 
+                    <div class='instruction' type='info'>Haga clic en boton para finalizar la actividad</div> 
+                    <div class='left'>
+                        <span title='Finalizar' class='icon_large icon_link icon_green ion-checkmark-circled jpit-activities-view' data-act-id='[idactividad]' data-act-title='[actividad]'></span>\r\n" +
+                    </div>
+                </div>
+            </section>
+            <!--sectionactividad--> 
+        </main> 
+        <footer class='not_print'>
+            <div class='measuring-progress'></div>
+            <nav label='Caracteristicas globales' class='globals'>
+                <menu>
+                    <menuitem data-global-id='results'><i title='Progreso' class='ion-clipboard tooltip' data-position-at='top'></i></menuitem>
+                    <menuitem data-global-id='return'>
+                        <i title='Maximizar' class='ion-arrow-expand tooltip maximize' data-position-at='top'></i>
+                        <i title='Minimizar' class='ion-arrow-shrink tooltip minimize' data-position-at='top'></i>
+                    </menuitem>
+                    <menuitem data-global-id='close_all'><i title='Regresar' class='ion-reply tooltip' data-position-at='top'></i></menuitem>
+                </menu>
+            </nav>
+            <div id='subpages_menu'>
+                <div class='button' previous-page></div>
+                <ul class='button' subpages-menu></ul>
+                <div class='button' next-page></div>
+            </div>
+            <div id='page_number'></div>
+        </footer> 
+    </div>
+    <div id='results_page' style='display:none;'>
+        <h2>Resumen de su avance en la lectura del documento</h2>
+        <h3>Paginas visitadas</h3>
+        <p>En verde, aquellas paginas que ya ha visitado.</p>
+        <div id='results_page_visited' class='container'></div>
+        <br class='clear' />
+        <h3>Actividades de aprendizaje</h3>
+        <div id='results_page_activities'></div>
+    </div>
+
+    <div id='printent_content' style='display:none;'>
+        <div class='content'></div>
+        <div class='button_container'>
+            <button class='general button' onclick='window.print();'>Imprimir</button>
+            <button id='printent_back' class='general button' >Volver</button>
+        </div>
+    </div> 
+</body> 
+</html>
