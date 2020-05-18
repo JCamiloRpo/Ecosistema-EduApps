@@ -1,12 +1,8 @@
 package com.example.euprofesor;
 
 import android.os.Environment;
-
 import org.apache.commons.net.ftp.FTP;
-import org.apache.commons.net.ftp.FTPCmd;
-import org.apache.commons.net.ftp.FTPReply;
 import org.apache.commons.net.ftp.FTPSClient;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;

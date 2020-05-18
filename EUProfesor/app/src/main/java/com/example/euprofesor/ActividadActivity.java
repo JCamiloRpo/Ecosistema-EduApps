@@ -31,6 +31,9 @@ public class ActividadActivity extends AppCompatActivity {
         recyclerActividad.setAdapter(mAdapter);
     }
 
+    /**
+     * Consultar todas actividades
+     */
     private void consultar(){
         String[][] data,files;
         String fileNames;

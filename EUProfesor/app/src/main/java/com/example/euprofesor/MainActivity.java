@@ -10,13 +10,13 @@ import android.widget.Button;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
-
 public class MainActivity extends AppCompatActivity {
 
     public static ConexionFTPS ftps;
     public static ConexionApiRest apiRest;
+    public static  ConexionSCORM scorm;
     public static Context context;
-    public static String idArea="0", area="";
+    public static String idArea="0", area="", profesor="";
     private Button btnSesion;
 
     @Override
@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
         context = getApplicationContext();
         idArea = "1";
+        profesor = "oscar";
         btnSesion = findViewById(R.id.btn_sesion);
     }
 

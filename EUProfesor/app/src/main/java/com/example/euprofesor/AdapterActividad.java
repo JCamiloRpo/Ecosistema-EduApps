@@ -41,7 +41,6 @@ public class AdapterActividad extends RecyclerView.Adapter<AdapterActividad.MyVi
 
 
     public class MyViewHolderDatos extends RecyclerView.ViewHolder {
-
         TextView idActividad, descripcion, tiempo, recurso;
         ImageButton btnExpand;
 
@@ -52,7 +51,11 @@ public class AdapterActividad extends RecyclerView.Adapter<AdapterActividad.MyVi
             tiempo = itemView.findViewById(R.id.text_tiempo);
             recurso = itemView.findViewById(R.id.text_recurso);
             btnExpand = itemView.findViewById(R.id.btnExpand);
+            ExpandaAndCollapse();
 
+        }
+
+        public void ExpandaAndCollapse(){
             btnExpand.setOnClickListener(new View.OnClickListener() {
                 private static final int DURATION = 250;
                 private ViewGroup layoutDetalle =itemView.findViewById(R.id.layoutDetalles);
@@ -69,7 +72,6 @@ public class AdapterActividad extends RecyclerView.Adapter<AdapterActividad.MyVi
                         rotate(-180.0f);
                     }
                 }
-
                 private void rotate(float angle) {
                     Animation animation = new RotateAnimation(0.0f, angle, Animation.RELATIVE_TO_SELF, 0.5f,
                             Animation.RELATIVE_TO_SELF, 0.5f);
@@ -78,7 +80,6 @@ public class AdapterActividad extends RecyclerView.Adapter<AdapterActividad.MyVi
                     btnExpand.startAnimation(animation);
                 }
             });
-
         }
 
     }

@@ -9,12 +9,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
+
+import org.json.JSONException;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.InvalidKeyException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class NewSesionActivity extends AppCompatActivity {
 
@@ -42,7 +46,6 @@ public class NewSesionActivity extends AppCompatActivity {
 
     /**
      * Metodo para agregar una nueva sesion con 3 actividades y cada una con 3 recursos
-     * @param v
      */
     public void btnAgregar(View v){
         String proposito = this.proposito.getText().toString();
@@ -63,62 +66,102 @@ public class NewSesionActivity extends AppCompatActivity {
             Toast.makeText(this, "La fecha de cierre no tiene el formato correcto (AAAA-MM-DD)", Toast.LENGTH_SHORT).show();
         else{
             try {
-                File ruta = new File(Environment.getExternalStorageDirectory()+ "/FTP/Subir");
-                if(!ruta.exists()){
-                    Toast.makeText(this,"Debe ubicar los archivos en: "+ruta.getAbsolutePath(),Toast.LENGTH_SHORT).show();
+                //Como las actividades de la sesion es estatica los archivos deben estar en la carpeta content del paquete SCORM
+                String storage = Environment.getExternalStorageDirectory().getAbsolutePath();
+                String path = storage+"/FTP/MySCORM";
+                File folderArchivos = new File(path+ "/content");
+                if(!folderArchivos.exists()){
+                    Toast.makeText(this,"Debe ubicar los archivos en: "+folderArchivos.getAbsolutePath(),Toast.LENGTH_SHORT).show();
                     return;
                 }
                 //Inserto una nueva sesion
                 String[][] data = MainActivity.apiRest.setData("Sesiones","ID,Area_ID,Descripcion,Fecha_Creacion,Fecha_Cierre",
-                        "0,"+MainActivity.idArea+","+proposito+","+fechaInicio+","+fechaCierre);
+                        "0,"+MainActivity.idArea+","+proposito.replaceAll(",","-")+","+fechaInicio+","+fechaCierre);
 
                 if(data.length==0){
                     Toast.makeText(this,"No se pudo crear la sesion",Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                String profe="oscar";
-                String idSesion= data[0][0];
-                String actividad;
-                String local="";
-                String remote="";
-                String names ="";
-                int tiempo = 20;
+                String remote="", names ="", local="", idSesion=data[0][0],nro, titulo, descripcion, tiempo;
 
-                //Con el ID de la nueva sesion, inserto las actividades
-                for(int i=0; i<3; i++){
-                    actividad="Descripcion de la actividad estatica "+(i+1);
-                    data = MainActivity.apiRest.setData("Actividades","ID,Sesion_ID,Descripcion,Tiempo",
-                            "0,"+idSesion+","+actividad+","+tiempo);
+                //Inicializar nuevo paquete SCORM
+                MainActivity.scorm = new ConexionSCORM("SCORM EduApps",
+                        "Este es el paquete SCORM creado desde codigo por medio de una plantilla",path);
+                MainActivity.scorm.setInfo("ID Sesion: "+idSesion,
+                        "<b>Proposito:</b> "+proposito+"<br><b>Profesor:</b> "+MainActivity.profesor+"<br><b>Area:</b>"+MainActivity.area);
 
-                    String idActividad = data[0][0];
-                    String recurso1="/home/admin/www/"+profe+"/"+idSesion+"-sesion/"+(i+1)+"-imagen.jpg";
-                    String recurso2="/home/admin/www/"+profe+"/"+idSesion+"-sesion/"+(i+1)+"-documento.docx";
-                    String recurso3="/home/admin/www/"+profe+"/"+idSesion+"-sesion/"+(i+1)+"-app.apk";
-
-                    remote +="/home/admin/www/"+profe+"/"+idSesion+"-sesion@";
-                    remote +="/home/admin/www/"+profe+"/"+idSesion+"-sesion@";
-                    remote +="/home/admin/www/"+profe+"/"+idSesion+"-sesion@";
-
-                    names +=(i+1)+"-imagen.jpg@";
-                    names +=(i+1)+"-documento.docx@";
-                    names +=(i+1)+"-app.apk@";
-
-
-                    local += Environment.getExternalStorageDirectory()+ "/FTP/Subir/imagen.jpg@";
-                    local += Environment.getExternalStorageDirectory()+ "/FTP/Subir/documento.docx@";
-                    local += Environment.getExternalStorageDirectory()+ "/FTP/Subir/app.apk@";
-
-                    //Con el ID de la actividad, inserto los recursos
-                    MainActivity.apiRest.setData("Recursos","ID,Actividad_ID,Hipervinculo","0,"+idActividad+","+recurso1);
-                    MainActivity.apiRest.setData("Recursos","ID,Actividad_ID,Hipervinculo","0,"+idActividad+","+recurso2);
-                    MainActivity.apiRest.setData("Recursos","ID,Actividad_ID,Hipervinculo","0,"+idActividad+","+recurso3);
+                //Actividad 1
+                nro="1";
+                titulo="Medio ambiente";
+                tiempo="10";
+                descripcion="Vamos a conocer el medio ambiente!. Ver el video para conocer el medio ambiente," +
+                        " luego la imagen con unos datos curiosos y por ultimo realizar la lectura del documento.";
+                List<ConexionSCORM.Recurso> recursos = new ArrayList<>(Arrays.asList(
+                        new ConexionSCORM.Recurso("¿Que es el medio ambiente?"," ",
+                                "content/act1/ambiente.mp4","video/mp4","ambiente.mp4"),
+                        new ConexionSCORM.Recurso("¿Sabias que?"," ",
+                                "content/act1/imagen.jpg","imagen/jpg","imagen.jpg"),
+                        new ConexionSCORM.Recurso("El agua","Realizar la lectura del siguiente documento:",
+                                "content/act1/informacion.pdf","documento/pdf","informacion.pdf")));
+                Toast.makeText(this,"Creando la actividad "+nro,Toast.LENGTH_SHORT).show();
+                crearActividad(idSesion,nro,titulo,descripcion,tiempo,recursos);
+                for(ConexionSCORM.Recurso r : recursos){
+                    //Datos servidor FTP
+                    remote+="/home/admin/www/"+MainActivity.profesor+"/"+idSesion+"-sesion@";
+                    names+=nro+"-"+r.getName()+"@";
+                    local+= storage+ "/FTP/MySCORM/content/act1/"+r.getName()+"@";
                 }
 
-                //Creacion del paquete SCORM
-                /*remote+="/home/admin/www/"+profe+"/"+idSesion+"@";
-                names+="SCORM"+idSesion+"@";
-                local+=Environment.getExternalStorageDirectory()+ "/FTP/Subir/SCORM"+idSesion+"@";**/
+                //Actividad 2
+                nro="2";
+                titulo="El agua";
+                tiempo="20";
+                descripcion="Ahora adentremonos en el agua y su ciclo, ademas conozcamos algunos retos sobre el cuidado del medio ambiente.";
+                recursos = new ArrayList<>(Arrays.asList(
+                        new ConexionSCORM.Recurso("Ciclo del agua","Entender el ciclo del agua.",
+                                "content/act2/agua.jpg","imagen/jpg","agua.jpg"),
+                        new ConexionSCORM.Recurso("El viaje de la gota del agua","Realizar la lectura del siguiente documento:",
+                                "content/act2/agua.pdf","documento/pdf","agua.pdf"),
+                        new ConexionSCORM.Recurso("Retos","Estos son algunos retos sobre el cuidado del medio ambiente:",
+                                "content/act2/retos.mp4","video/mp4","retos.mp4")));
+                Toast.makeText(this,"Creando la actividad "+nro,Toast.LENGTH_SHORT).show();
+                crearActividad(idSesion,nro,titulo,descripcion,tiempo,recursos);
+                for(ConexionSCORM.Recurso r : recursos){
+                    //Datos servidor FTP
+                    remote+="/home/admin/www/"+MainActivity.profesor+"/"+idSesion+"-sesion@";
+                    names+=nro+"-"+r.getName()+"@";
+                    local+= storage+ "/FTP/MySCORM/content/act2/"+r.getName()+"@";
+                }
+
+                //Actividad 3
+                nro="3";
+                titulo="Cuidar el medio ambiente";
+                tiempo="15";
+                descripcion="Cuidemos el medio ambiente!. Realizar la lectura del documento para conocer la acciones que podemos realizar," +
+                        " luego instalar las aplicaciones, la primera nos brinda consejos para tener una casa sustentable y la segunda un" +
+                        " seguimiento para realizar desafios ambientales.";
+                recursos = new ArrayList<>(Arrays.asList(
+                        new ConexionSCORM.Recurso("Cuidar el planeta","Conoce algunas cosas que puede hacer para cuidar el planeta",
+                                "content/act3/acciones.pdf","documento/pdf","acciones.pdf"),
+                        new ConexionSCORM.Recurso("Casa sustentable","Esta aplicacion te brindara consejos para cuidar el medio ambiente desde tu casa",
+                                "content/act3/casa.apk","aplicacion/apk","casa.apk"),
+                        new ConexionSCORM.Recurso("Desafia ambiental","Esta aplicacion te planteara unos desafios para cuidar el medio ambiente",
+                                "content/act3/desafios.apk","aplicacion/apk","desafios.apk")));
+                Toast.makeText(this,"Creando la actividad "+nro,Toast.LENGTH_SHORT).show();
+                crearActividad(idSesion,nro,titulo,descripcion,tiempo,recursos);
+                for(ConexionSCORM.Recurso r : recursos){
+                    //Datos servidor FTP
+                    remote+="/home/admin/www/"+MainActivity.profesor+"/"+idSesion+"-sesion@";
+                    names+=nro+"-"+r.getName()+"@";
+                    local+= storage+ "/FTP/MySCORM/content/act3/"+r.getName()+"@";
+                }
+
+                //Generar SCORM
+                String tmp = MainActivity.scorm.generar(idSesion);
+                remote+="/home/admin/www/"+MainActivity.profesor+"/"+idSesion+"-sesion@";
+                names+="SCORM"+idSesion+".zip@";
+                local+= tmp+"@";
 
                 //Se envian los vectores con las rutas donde quedaran los archivos, los nombres
                 new UploadTask().execute(remote.split("@"),names.split("@"), local.split("@"));
@@ -136,6 +179,34 @@ public class NewSesionActivity extends AppCompatActivity {
 
 
         }
+    }
+
+    /**
+     * metodo para crear las actividades con sus recursos, tanto en el nodo como en el paquete SCORM
+     * Necesario para la base de datos
+     * @param idSesion
+     * Necesarios para el paquete SCORM
+     * @param nro
+     * @param titulo
+     * Necesarios para la base de datos y paquete SCORM
+     * @param descripcion
+     * @param tiempo
+     * @param recursos es una lista de tipo ConexionSCORM.Recurso
+     */
+    public void crearActividad(String idSesion, String nro, String titulo, String descripcion, String tiempo, List<ConexionSCORM.Recurso> recursos)
+            throws JSONException, IOException, InvalidKeyException, IllegalAccessException {
+        //Crear la actividad
+        String[][] data = MainActivity.apiRest.setData("Actividades","ID,Sesion_ID,Descripcion,Tiempo",
+                "0,"+idSesion+","+descripcion.replaceAll(",","-")+","+tiempo);
+
+        String idActividad = data[0][0];
+        for(ConexionSCORM.Recurso r : recursos){
+            //Crear los recursos
+            String db="/home/admin/www/"+MainActivity.profesor+"/"+idSesion+"-sesion/"+nro+"-"+r.getName();
+            MainActivity.apiRest.setData("Recursos","ID,Actividad_ID,Hipervinculo","0,"+idActividad+","+db);
+        }
+        //Agregar para el paquete SCORM
+        MainActivity.scorm.addActividad("Actividad"+nro,titulo,descripcion+"<br><b>Tiempo:</b>"+tiempo+" minutos.",recursos);
     }
 
     /**
